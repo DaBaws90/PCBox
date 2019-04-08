@@ -1,0 +1,35 @@
+page-register {
+    @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+      
+        to {
+          opacity: 1;
+        }
+      }
+
+    .fadeIn {
+        animation-name: fadeIn;
+        animation-duration: 1s;
+    }
+
+    @keyframes fiveStatesFadeIn {
+        0% {
+            opacity: 0;
+        }
+        25% {
+            opacity: 0;
+        }
+        50% {
+            opacity: 0.33;
+        }
+        75% {
+            opacity: 0.66;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    
+}
