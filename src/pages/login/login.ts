@@ -20,7 +20,8 @@ export class LoginPage {
   user:any;
   data = {
     email: "",
-    password: ""
+    password: "",
+    remember_me: true,
   }; 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public authProvider: AuthenticationProvider) {
@@ -31,12 +32,16 @@ export class LoginPage {
   }
 
   private logIn(){
-    
-    this.authProvider.login(this.data).then((LEL) => {
+    this.authProvider.login(this.data).then((res) => {
       // DO SOMETHING
-      this.test = LEL;
+      this.test = res;
       console.log(this.test);
     });
+  }
+
+  private setRemember() {
+    this.data.remember_me = !this.data.remember_me;
+    console.log("REMEMBER ME? -> " + this.data.remember_me);
   }
 
   private goToRegister() {

@@ -13,26 +13,37 @@
 <ion-content padding text-center>
   <div class="fadeIn">
     <ion-list>
-      <form>
+      <form [formGroup]="myForm" (ngSubmit)="signUp()">
+        
         <ion-item>
           <ion-label floating>Name</ion-label>
-          <ion-input [(ngModel)]="data.name" type="text" name="name" required></ion-input>
+          <ion-input formControlName="name" type="text"></ion-input>
         </ion-item>
+        
         <ion-item>
           <ion-label floating>Email</ion-label>
-          <ion-input [(ngModel)]="data.email" type="email" name="email" required></ion-input>
+          <ion-input formControlName="email" type="email"></ion-input>
         </ion-item>
+        
         <ion-item>
           <ion-label floating>Password</ion-label>
-          <ion-input [(ngModel)]="data.password" type="password" name="password" required></ion-input>
+          <ion-input formControlName="password" type="password"></ion-input>
         </ion-item>
+        
         <ion-item>
           <ion-label floating>Confirm Password</ion-label>
-          <ion-input [(ngModel)]="data.password_confirmation" type="password" name="password_confirmation" required></ion-input>
+          <ion-input formControlName="password_confirmation" type="password"></ion-input>
+          
         </ion-item>
-        <div padding>
-          <button ion-button (click)="signUp()" block>Sign Up</button>
+        
+        <div padding float-left style="color:red" *ngIf="myForm.controls.password_confirmation.errors?.samePass">
+          Passwords don't match
         </div>
+        
+        <div padding>
+          <button ion-button type="submit" [disabled]="!myForm.valid" block>Sign Up</button>
+        </div>
+      
       </form>
     </ion-list>
   </div>

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ɵConsole } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 /**
  * Generated class for the RegisterPage page.
@@ -15,35 +16,65 @@ import { AuthenticationProvider } from '../../providers/authentication/authentic
   templateUrl: 'register.html',
 })
 export class RegisterPage {
-  test:any;
-  data = {
-    name: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
-  }
+  myForm: FormGroup;
+  test = {};
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public authProv:AuthenticationProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public authProv:AuthenticationProvider,
+    public formB: FormBuilder) {
+      // Build the form with some validators, including the custom abstract control validator for password matching
+      this.myForm = this.formB.group({
+        name: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+        email: ['', Validators.compose([Validators.maxLength(70), Validators.pattern('^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$'), Validators.required])],
+        password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+        password_confirmation: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
+      }, {
+        validator: this.samePass
+      });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad RegisterPage');
   }
 
+  // Manages the register HTTP Request call
   private signUp() {
-    // let data = {
-    //   name: name,
-    //   email: email,
-    //   password: pass,
-    //   password_confirmation: pass_c,
-    // }
-
-    console.log(this.data);
-    this.authProv.register(this.data).then((LUL) => {
-      this.test = LUL;
+    // Calls the AuthProvider's method to manage the register request
+    this.authProv.register(this.myForm.value).then((data) => {
+      this.test = data;
+      if (data['name'] === "HttpErrorResponse") {
+        console.log("SHIET SON");
+      }
+      else {
+        console.log("HAPPY CODING");
+      }
+      
+      // Get the data response from API Controller
+      console.log("SIGNUP METHOD:");
       console.log(this.test);
-      console.log(LUL);
+      // Handles the error if no logic for that has been included in provider
     })
+    // .catch(error => {
+    //   console.log("ERROR HANDLED: ");
+    //   console.log(error);
+    // });
+  }
+
+  // Handles the matching for both password and password_confirmation form fields
+  private samePass(absCtrl: AbstractControl) {
+    // Retrieves both values from HTML form
+    const password = absCtrl.get('password').value;
+    const password_confirmation = absCtrl.get('password_confirmation').value;
+    
+    // Set errors if both passwords don't match
+    if(password != password_confirmation) {
+      // console.log('false');
+      absCtrl.get('password_confirmation').setErrors( { samePass: true } )
+    } 
+    else {
+      // Set no errors if passwords match
+      // console.log('true');
+      absCtrl.get('password_confirmation').setErrors(null);
+    }
   }
 
 }
