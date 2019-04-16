@@ -18,6 +18,7 @@ export class AuthenticationProvider {
   header = new HttpHeaders({ "Content-Type": "application/json", "Accept": "application/json" });
 
   baseUrl:string = "https://localhost/public/api/auth";
+  // baseUrl:string = "https://192.168.0.154/public/api/auth";
 
   token:any;
 
@@ -46,26 +47,16 @@ export class AuthenticationProvider {
         // Subscribes the response to manage it accordingly
         .subscribe(response => {
           // Do something on success
+          this.displayToast("User " + response['success']['user']['email'] + " was succesfully registered");
+          this.saveOnStorage(response['success']['token']);
           resolve(response);
         }, error => {
           // Calls the AUX function to properly handle the error response and set the return value into a local var to display a message
           let temp = this.errorHandler(error);
           // Shows a message with user friendly info about the error
-          let toast = this.toastCtrl.create({
-            message: temp,
-            duration: 5000,
-            position: 'bottom'
-          });
-          toast.present();
+          this.displayToast(temp);
           // Resolve/returns JSON response from API Controller
           resolve(error);
-
-          if(error.status === 401){
-            resolve("401 LUL");
-          }
-          else {
-            resolve(error);
-          }
         });
     });
   }
@@ -86,6 +77,15 @@ export class AuthenticationProvider {
       ],
     });
     alert.present();
+  }
+
+  // AUX function to display a message (toast) on success
+  private displayToast(text:string) {
+    this.toastCtrl.create({
+      message: text,
+      duration: 5000,
+      position: 'bottom',
+    }).present();
   }
   
   getUsers() {
@@ -110,6 +110,10 @@ export class AuthenticationProvider {
         // Handles the error
         console.log(error);
       });
+  }
+
+  getToken() {
+    console.log(this.storage.get('token'));
   }
 
   // AUX function to handle error based on response type

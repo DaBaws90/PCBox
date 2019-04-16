@@ -32,11 +32,12 @@ export class LoginPage {
   }
 
   private logIn(){
-    this.authProvider.login(this.data).then((res) => {
-      // DO SOMETHING
-      this.test = res;
-      console.log(this.test);
-    });
+    this.authProvider.getToken();
+    // this.authProvider.login(this.data).then((res) => {
+    //   // DO SOMETHING
+    //   this.test = res;
+    //   console.log(this.test);
+    // });
   }
 
   private setRemember() {

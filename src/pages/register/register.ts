@@ -40,17 +40,19 @@ export class RegisterPage {
   private signUp() {
     // Calls the AuthProvider's method to manage the register request
     this.authProv.register(this.myForm.value).then((data) => {
-      this.test = data;
+      // Check the response to determine if is an error or a success 
       if (data['name'] === "HttpErrorResponse") {
-        console.log("SHIET SON");
+        console.error("There was an error");
       }
       else {
         console.log("HAPPY CODING");
+        console.log("REDIRECTING BACK to ROOT PAGE");
+        const transitionOpts = {
+          animation: 'md-transition',
+          duration: 1000,
+        };
+        this.navCtrl.popToRoot(transitionOpts)
       }
-      
-      // Get the data response from API Controller
-      console.log("SIGNUP METHOD:");
-      console.log(this.test);
       // Handles the error if no logic for that has been included in provider
     })
     // .catch(error => {
