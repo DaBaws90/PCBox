@@ -5,6 +5,11 @@ import 'rxjs/add/operator/map';
 import { Storage } from '@ionic/storage';
 import { AlertController, ToastController } from 'ionic-angular';
 import { templateJitUrl } from '@angular/compiler';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromPromise';
+
+declare var require:Function;
+const localForage:LocalForage = require('localforage');
 
 /*
   Generated class for the AuthenticationProvider provider.
@@ -24,7 +29,9 @@ export class AuthenticationProvider {
 
   constructor(public http: HttpClient, private storage: Storage, public alertCtrl: AlertController, public toastCtrl: ToastController) {
     console.log('Hello AuthenticationProvider Provider');
-    
+    localForage.config({
+      name: 'MyApp'
+    });
   }
 
   login(data:any) {
@@ -48,7 +55,9 @@ export class AuthenticationProvider {
         .subscribe(response => {
           // Do something on success
           this.displayToast("User " + response['success']['user']['email'] + " was succesfully registered");
-          this.saveOnStorage(response['success']['token']);
+          console.log("tokn gonna be saved");
+          console.log(response['success']['token']);
+          this.saveOnStorage(response['success']);
           resolve(response);
         }, error => {
           // Calls the AUX function to properly handle the error response and set the return value into a local var to display a message
@@ -101,19 +110,38 @@ export class AuthenticationProvider {
   // AUX function to handle the local storage save proccess
   private saveOnStorage(token:any) {
     // Waits until storage is ready, then =>
-    this.storage.ready()
-      .then(() => {
+    localForage.ready().then(() => {
         // Saves the token
-        this.storage.set('token', token.accessToken)
+        localForage.setItem('token', token).then(() => {
+          this.token = localForage.getItem('token')
+            .then(() => {
+              console.log("TOKEN SAVED")
+            })
+            .catch(err => {
+              console.error("Whoops!")
+            });
+        })
+        .catch(err => {
+          console.error()
+        });
       })
       .catch(error => {
         // Handles the error
-        console.log(error);
+        console.log("LOCALFORAGE COULDN'T GET READY")
+        console.error(error);
       });
   }
 
   getToken() {
-    console.log(this.storage.get('token'));
+    // return Observable.fromPromise(this.storage.get('token'));
+    localForage.getItem('token')
+      .then( data => {
+        this.token = data;
+        console.log("TOKEN: " + this.token['token'])
+      })
+      .catch(err => {
+        console.error("An error has ocurred while retrieving the token")
+      });
   }
 
   // AUX function to handle error based on response type

@@ -47,11 +47,11 @@ export class RegisterPage {
       else {
         console.log("HAPPY CODING");
         console.log("REDIRECTING BACK to ROOT PAGE");
-        const transitionOpts = {
-          animation: 'md-transition',
-          duration: 1000,
-        };
-        this.navCtrl.popToRoot(transitionOpts)
+        // const transitionOpts = {
+        //   animation: 'md-transition',
+        //   duration: 1000,
+        // };
+        this.navCtrl.popToRoot()
       }
       // Handles the error if no logic for that has been included in provider
     })

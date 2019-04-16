@@ -33,6 +33,8 @@ export class LoginPage {
 
   private logIn(){
     this.authProvider.getToken();
+    // console.log();
+    
     // this.authProvider.login(this.data).then((res) => {
     //   // DO SOMETHING
     //   this.test = res;
