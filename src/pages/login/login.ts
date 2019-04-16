@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RegisterPage } from '../register/register';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the LoginPage page.
@@ -16,13 +17,17 @@ import { AuthenticationProvider } from '../../providers/authentication/authentic
   templateUrl: 'login.html',
 })
 export class LoginPage {
-  test:any;
-  user:any;
+  
   data = {
     email: "",
     password: "",
     remember_me: true,
-  }; 
+  };
+
+  transitionOpts = {
+    animation: 'md-transition',
+    duration: 1000,
+  };
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public authProvider: AuthenticationProvider) {
   }
@@ -32,14 +37,19 @@ export class LoginPage {
   }
 
   private logIn(){
-    this.authProvider.getToken();
-    // console.log();
-    
-    // this.authProvider.login(this.data).then((res) => {
-    //   // DO SOMETHING
-    //   this.test = res;
-    //   console.log(this.test);
-    // });
+    console.log(this.data);
+    this.authProvider.login(this.data).then((res) => {
+      // DO SOMETHING
+      console.log(res);
+      if (res['name'] === "HttpErrorResponse") {
+        console.error("There was an error");
+        console.error(res);
+      }
+      else {
+        console.log("BROWSING to ROOT PAGE");
+        this.navCtrl.push(HomePage, {}, this.transitionOpts);
+      }
+    });
   }
 
   private setRemember() {
@@ -48,12 +58,7 @@ export class LoginPage {
   }
 
   private goToRegister() {
-    const transitionOpts = {
-      animation: 'md-transition',
-      duration: 1000,
-    };
-
-    this.navCtrl.push(RegisterPage, {}, transitionOpts);
+    this.navCtrl.push(RegisterPage, {}, this.transitionOpts);
   }
 
 }

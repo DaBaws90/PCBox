@@ -36,40 +36,107 @@ export class AuthenticationProvider {
 
   login(data:any) {
     return new Promise((resolve, reject) => {
-      // Añadir headers Bearer token en peticiones
-      this.http.post(this.baseUrl + "", JSON.stringify(data))
-        .subscribe(result => {
-          resolve(result);
+      // Send a HTTP Request to the specified URL
+      this.http.post(this.baseUrl + "/login", JSON.stringify(data), { headers : this.header })
+        // Subscribes the response to manage it accordingly
+        .subscribe(response => {
+          // Do something on success
+          this.saveOnStorage(response).then(() => {
+            resolve(response);
+          });
         }, error => {
-          reject(error);
+          let temp = this.errorHandler(error);
+          this.displayToast(temp);
+          resolve(error);
         });
     });
   }
   
   register(data:any) {
     return new Promise((resolve, reject) => {
-      // data.password_confirmation = "LEL";
       // Send a HTTP Request to the specified URL
       this.http.post(this.baseUrl + "/register", JSON.stringify(data), { headers: this.header})
         // Subscribes the response to manage it accordingly
         .subscribe(response => {
           // Do something on success
           this.displayToast("User " + response['success']['user']['email'] + " was succesfully registered");
-          console.log("tokn gonna be saved");
-          console.log(response['success']['token']);
-          this.saveOnStorage(response['success']);
           resolve(response);
         }, error => {
           // Calls the AUX function to properly handle the error response and set the return value into a local var to display a message
           let temp = this.errorHandler(error);
           // Shows a message with user friendly info about the error
           this.displayToast(temp);
-          // Resolve/returns JSON response from API Controller
+          // Resolve/returns JSON error response from API Controller
           resolve(error);
         });
     });
   }
 
+  logout() {
+    return new Promise((resolve, reject) => {
+      this.getToken().then((data) => {
+        let headerTmp = new HttpHeaders({'Authorization': 'Bearer ' + data['access_token']})
+        console.log(headerTmp);
+        console.log(data);
+        this.http.get(this.baseUrl + '/logout', { headers: headerTmp })
+          .subscribe(response => {
+            console.log("RSPONSE: ")
+            console.log(response);
+            resolve(response);
+        }, error => {
+            console.error("An eror ocurred: ");
+            console.log(error);
+            // let tmp = this.errorHandler(error);
+            // this.displayToast(tmp);
+            resolve(error);
+        })
+      })      
+    })
+  }
+
+  // AUX function to handle the local storage save proccess
+  private saveOnStorage(token:any) {
+    return new Promise((resolve, reject) => {
+      // Waits until storage is ready, then =>
+      localForage.ready().then(() => {
+        // Saves the token
+        localForage.setItem('token', token).then(() => {
+          console.log("TOKEN SET PROPERLY");
+
+          this.token = localForage.getItem('token')
+            .then(() => {
+              console.log("TOKEN SAVED")
+            })
+            .catch(err => {
+              console.error("ERROR SAVING TOKEN")
+            });
+          })
+
+          .catch(err => {
+            console.error("TOKEN CANNOT BE SET")
+        });
+      })
+      resolve(true);
+    })
+    
+  }
+
+  getToken() {
+    return new Promise((resolve, reject) => {
+      localForage.getItem('token')
+        .then( data => {
+          this.token = data;
+          // console.log("TOKEN: " + this.token['access_token']);
+          resolve(data);
+        })
+        .catch(err => {
+          console.error("An error has ocurred while retrieving the token")
+          resolve(err)
+        });
+      })
+  }
+
+  
   // AUX function to display a popup (alert) containing error details
   private showAlert(text:string) {
     let alert = this.alertCtrl.create({
@@ -107,66 +174,33 @@ export class AuthenticationProvider {
     });
   }
 
-  // AUX function to handle the local storage save proccess
-  private saveOnStorage(token:any) {
-    // Waits until storage is ready, then =>
-    localForage.ready().then(() => {
-        // Saves the token
-        localForage.setItem('token', token).then(() => {
-          this.token = localForage.getItem('token')
-            .then(() => {
-              console.log("TOKEN SAVED")
-            })
-            .catch(err => {
-              console.error("Whoops!")
-            });
-        })
-        .catch(err => {
-          console.error()
-        });
-      })
-      .catch(error => {
-        // Handles the error
-        console.log("LOCALFORAGE COULDN'T GET READY")
-        console.error(error);
-      });
-  }
-
-  getToken() {
-    // return Observable.fromPromise(this.storage.get('token'));
-    localForage.getItem('token')
-      .then( data => {
-        this.token = data;
-        console.log("TOKEN: " + this.token['token'])
-      })
-      .catch(err => {
-        console.error("An error has ocurred while retrieving the token")
-      });
-  }
-
   // AUX function to handle error based on response type
   private errorHandler(error: HttpErrorResponse) {
     // Creates an empty string var
     let temp = "";
-
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
-      // Fills the empty tring with a message
-      temp = 'An error occurred:', error.error.message;
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong
-      
-      // Gets every key for very single errors array elements
-      let keys = Object.keys(error.error.error);
-        // Generates a string to show it up in an alert modal
-        temp = `Error code ${error.status} (${error.statusText}), error(s) details are: `
-        // Iterates over the errors array and concats every error into the string
-        for(var i = 0; i < keys.length; i++) {
-          temp += error.error.error[keys[i]][0];
-        }
-      console.error(`Backend returned code ${error.status}, message was: ${temp}`);
+    if(error.error.error) {
+      if (error.error instanceof ErrorEvent) {
+        // A client-side or network error occurred. Handle it accordingly.
+        console.error('An error occurred:', error.error.message);
+        // Fills the empty tring with a message
+        temp = 'An error occurred:', error.error.message;
+      } else {
+        // The backend returned an unsuccessful response code.
+        // The response body may contain clues as to what went wrong
+        
+        // Gets every key for very single errors array elements
+        let keys = Object.keys(error.error.error);
+          // Generates a string to show it up in an alert modal
+          temp = `Error code ${error.status} (${error.statusText}), error(s) details are: `
+          // Iterates over the errors array and concats every error into the string
+          for(var i = 0; i < keys.length; i++) {
+            temp += error.error.error[keys[i]][0];
+          }
+        console.error(`Backend returned code ${error.status}, message was: ${temp}`);
+      }
+    }
+    else {
+      temp = `Error code ${error.status} (${error.statusText}), error(s) details are: ` + error.error.message;
     }
     // return an observable with a user-facing error message
     // return throwError('Something bad happened; please try again later.');

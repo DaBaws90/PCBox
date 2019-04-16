@@ -45,20 +45,10 @@ export class RegisterPage {
         console.error("There was an error");
       }
       else {
-        console.log("HAPPY CODING");
         console.log("REDIRECTING BACK to ROOT PAGE");
-        // const transitionOpts = {
-        //   animation: 'md-transition',
-        //   duration: 1000,
-        // };
         this.navCtrl.popToRoot()
       }
-      // Handles the error if no logic for that has been included in provider
     })
-    // .catch(error => {
-    //   console.log("ERROR HANDLED: ");
-    //   console.log(error);
-    // });
   }
 
   // Handles the matching for both password and password_confirmation form fields
@@ -69,12 +59,10 @@ export class RegisterPage {
     
     // Set errors if both passwords don't match
     if(password != password_confirmation) {
-      // console.log('false');
       absCtrl.get('password_confirmation').setErrors( { samePass: true } )
     } 
     else {
       // Set no errors if passwords match
-      // console.log('true');
       absCtrl.get('password_confirmation').setErrors(null);
     }
   }
