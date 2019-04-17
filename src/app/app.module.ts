@@ -15,6 +15,7 @@ import { AuthenticationProvider } from '../providers/authentication/authenticati
 import { HttpClientModule } from '@angular/common/http';
 
 import { IonicStorageModule } from '@ionic/storage';
+import { ProfilePage } from '../pages/profile/profile';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { IonicStorageModule } from '@ionic/storage';
     HomePage,
     LoginPage,
     RegisterPage,
+    ProfilePage,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +37,7 @@ import { IonicStorageModule } from '@ionic/storage';
     HomePage,
     LoginPage,
     RegisterPage,
+    ProfilePage,
   ],
   providers: [
     StatusBar,

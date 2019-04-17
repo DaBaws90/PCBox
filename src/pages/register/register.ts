@@ -17,7 +17,6 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 })
 export class RegisterPage {
   myForm: FormGroup;
-  test = {};
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public authProv:AuthenticationProvider,
     public formB: FormBuilder) {
@@ -40,14 +39,12 @@ export class RegisterPage {
   private signUp() {
     // Calls the AuthProvider's method to manage the register request
     this.authProv.register(this.myForm.value).then((data) => {
-      // Check the response to determine if is an error or a success 
-      if (data['name'] === "HttpErrorResponse") {
-        console.error("There was an error");
-      }
-      else {
-        console.log("REDIRECTING BACK to ROOT PAGE");
-        this.navCtrl.popToRoot()
-      }
+      console.info("Success on SignUp -> Redirecting to RootPage");
+      this.navCtrl.popToRoot();
+    })
+    .catch(err => {
+      console.error("There was an error at AuthProvider register's method");
+      console.error(err);
     })
   }
 

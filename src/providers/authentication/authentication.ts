@@ -1,12 +1,12 @@
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
 import { Storage } from '@ionic/storage';
-import { AlertController, ToastController } from 'ionic-angular';
-import { templateJitUrl } from '@angular/compiler';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromPromise';
+import { AlertController, ToastController, NavController } from 'ionic-angular';
+
+// import { Observable } from 'rxjs/Observable';
+// import 'rxjs/add/observable/fromPromise';
+// import 'rxjs/add/operator/toPromise';
+// import 'rxjs/add/operator/map';
 
 declare var require:Function;
 const localForage:LocalForage = require('localforage');
@@ -27,6 +27,11 @@ export class AuthenticationProvider {
 
   token:any;
 
+  transitionOpts = {
+    animation: 'md-transition',
+    duration: 1000,
+  };
+
   constructor(public http: HttpClient, private storage: Storage, public alertCtrl: AlertController, public toastCtrl: ToastController) {
     console.log('Hello AuthenticationProvider Provider');
     localForage.config({
@@ -34,6 +39,7 @@ export class AuthenticationProvider {
     });
   }
 
+  // Handles the login user's HTTP request
   login(data:any) {
     return new Promise((resolve, reject) => {
       // Send a HTTP Request to the specified URL
@@ -43,15 +49,22 @@ export class AuthenticationProvider {
           // Do something on success
           this.saveOnStorage(response).then(() => {
             resolve(response);
+          })
+          // Handles errors from token saving function
+          .catch(err => {
+            console.info("Error saving token in storage");
+            console.error(err);
           });
         }, error => {
+          // Handles the error response from HTTP request
           let temp = this.errorHandler(error);
           this.displayToast(temp);
-          resolve(error);
+          reject(error);
         });
     });
   }
   
+  // Handles the register user's HTTP request
   register(data:any) {
     return new Promise((resolve, reject) => {
       // Send a HTTP Request to the specified URL
@@ -66,32 +79,68 @@ export class AuthenticationProvider {
           let temp = this.errorHandler(error);
           // Shows a message with user friendly info about the error
           this.displayToast(temp);
-          // Resolve/returns JSON error response from API Controller
-          resolve(error);
+          // Rejects JSON error response from API Controller
+          reject(error);
         });
     });
   }
 
+  // Handles the logout HTTP Request
   logout() {
     return new Promise((resolve, reject) => {
       this.getToken().then((data) => {
+        // Appends the auth token in the headers
         let headerTmp = new HttpHeaders({'Authorization': 'Bearer ' + data['access_token']})
-        console.log(headerTmp);
-        console.log(data);
+        // Send a HTTP Request to the specified URL with headers properly set
         this.http.get(this.baseUrl + '/logout', { headers: headerTmp })
+          // Subscribes to HTTP response
           .subscribe(response => {
-            console.log("RSPONSE: ")
-            console.log(response);
-            resolve(response);
+            // Removes token from local storage
+            localForage.removeItem('token').then(() => {
+              console.info("Token cleared!");
+              // Displays logged out success response
+              this.displayToast(response['success']);
+              resolve(response);
+            }).catch(err => {
+              console.error("Unable to remove token");
+              console.error(err);
+              resolve(err);
+            });
+        // Handles the error in HTTP request and displays an info message to user
         }, error => {
             console.error("An eror ocurred: ");
             console.log(error);
-            // let tmp = this.errorHandler(error);
-            // this.displayToast(tmp);
+            let tmp = this.errorHandler(error);
+            this.displayToast(tmp);
             resolve(error);
         })
       })      
     })
+  }
+
+  // Retrieves the current authenticated user's info
+  getUserInfo() {
+    return new Promise((resolve, reject) => {
+      // Sets the headers properly
+      let header = new HttpHeaders({ 
+        "Content-Type": "application/json", 
+        "Accept": "application/json", 
+        'Authorization': 'Bearer ' + this.token['access_token']
+      });
+      // Send a HTTP Request to the specified URL
+      this.http.get(this.baseUrl + '/user', { headers: header})
+        // Subscribs and resolves the response on success
+        .subscribe((response) => {
+          // console.log(response);
+          resolve(response);
+        }, error => {
+          // Handles the error and displays an info message to user
+          console.error("Error at getUserInfo method");
+          let tmp = this.errorHandler(error);
+          this.displayToast(tmp);
+          reject(error);
+        });
+    });
   }
 
   // AUX function to handle the local storage save proccess
@@ -101,56 +150,51 @@ export class AuthenticationProvider {
       localForage.ready().then(() => {
         // Saves the token
         localForage.setItem('token', token).then(() => {
-          console.log("TOKEN SET PROPERLY");
-
-          this.token = localForage.getItem('token')
-            .then(() => {
-              console.log("TOKEN SAVED")
-            })
-            .catch(err => {
-              console.error("ERROR SAVING TOKEN")
-            });
-          })
-
-          .catch(err => {
-            console.error("TOKEN CANNOT BE SET")
+          // Retrieves the token value and saves it into a var
+          this.getToken().then(() => {
+            console.info("TOKEN HAS BEEN SET");
+            resolve(true);
+          });
+        })
+        // Handles errors in token saving process
+        .catch(err => {
+          console.error("TOKEN CANNOT BE SET")
+          reject(err);
         });
-      })
-      resolve(true);
-    })
-    
+      });
+    });
   }
 
+  // Gets the token value and stores it into a var
   getToken() {
     return new Promise((resolve, reject) => {
+      // Retrieves the token value from storage
       localForage.getItem('token')
         .then( data => {
+          // Save the value into a var and resolves on success
           this.token = data;
-          // console.log("TOKEN: " + this.token['access_token']);
           resolve(data);
         })
+        // Resolves with the error info in case there was one
         .catch(err => {
-          console.error("An error has ocurred while retrieving the token")
-          resolve(err)
+          // console.error("An error has ocurred while retrieving the token");
+          reject(err);
         });
       })
   }
 
-  
   // AUX function to display a popup (alert) containing error details
   private showAlert(text:string) {
     let alert = this.alertCtrl.create({
-      title: "Whoops!",
+      title: "Something went wrong!",
       subTitle: text,
-      buttons: [
-        {
-          text: 'Accept',
-          handler: () => {
-            // Do something on dismiss
-            console.log('Agree clicked');
-          }
+      buttons: [{
+        text: 'Accept',
+        handler: () => {
+          // Do something on dismiss
+          console.log('Agree clicked');
         }
-      ],
+      }],
     });
     alert.present();
   }
@@ -162,16 +206,6 @@ export class AuthenticationProvider {
       duration: 5000,
       position: 'bottom',
     }).present();
-  }
-  
-  getUsers() {
-    return new Promise((resolve, reject) => {
-      this.http.get(this.baseUrl + "/users").subscribe(result => {
-        resolve(result);
-      }, error => {
-        console.log(error);
-      });
-    });
   }
 
   // AUX function to handle error based on response type

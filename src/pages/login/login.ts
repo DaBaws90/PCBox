@@ -24,11 +24,6 @@ export class LoginPage {
     remember_me: true,
   };
 
-  transitionOpts = {
-    animation: 'md-transition',
-    duration: 1000,
-  };
-
   constructor(public navCtrl: NavController, public navParams: NavParams, public authProvider: AuthenticationProvider) {
   }
 
@@ -37,18 +32,14 @@ export class LoginPage {
   }
 
   private logIn(){
-    console.log(this.data);
     this.authProvider.login(this.data).then((res) => {
-      // DO SOMETHING
-      console.log(res);
-      if (res['name'] === "HttpErrorResponse") {
-        console.error("There was an error");
-        console.error(res);
-      }
-      else {
-        console.log("BROWSING to ROOT PAGE");
-        this.navCtrl.push(HomePage, {}, this.transitionOpts);
-      }
+      this.navCtrl.setRoot(HomePage);
+      this.navCtrl.popToRoot(this.authProvider.transitionOpts);
+      console.log("Brownsing to HomePage");
+    })
+    .catch(error => {
+      console.error("There was an error at LogIn AuthProvider's method");
+      console.error(error);
     });
   }
 
@@ -58,7 +49,7 @@ export class LoginPage {
   }
 
   private goToRegister() {
-    this.navCtrl.push(RegisterPage, {}, this.transitionOpts);
+    this.navCtrl.push(RegisterPage, {}, this.authProvider.transitionOpts);
   }
 
 }

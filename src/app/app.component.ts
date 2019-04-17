@@ -28,17 +28,21 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-      this.authProv.getToken().then(() => {
-        // if (this.authProv.token != null || this.authProv.token != undefined) {
-        //   this.rootPage = HomePage;
-        // }
-        // else {
-        //   this.rootPage = LoginPage;
-        // }
+      // Check if there is a token currently stored in order to set the RootPage dynamically
+      this.authProv.getToken().then((token) => {
+        if(token) {
+          console.log("TOKEN LOADED AT STARTUP: " + token['access_token']);
+          this.rootPage = HomePage;
+        }
+        else {
+          this.rootPage = LoginPage;
+        }
+      })
+      .catch(err => {
+        console.error("An error has occurred retrieving the token at startup");
       });
-      
     });
-    
   }
+
 }
 
