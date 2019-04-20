@@ -46,8 +46,9 @@ export class AuthenticationProvider {
       this.http.post(this.baseUrl + "/login", JSON.stringify(data), { headers : this.header })
         // Subscribes the response to manage it accordingly
         .subscribe(response => {
-          // Do something on success
+          // Stores the token received on response
           this.saveOnStorage(response).then(() => {
+            this.displayToast("Successfully logged in");
             resolve(response);
           })
           // Handles errors from token saving function
@@ -171,16 +172,39 @@ export class AuthenticationProvider {
       // Retrieves the token value from storage
       localForage.getItem('token')
         .then( data => {
-          // Save the value into a var and resolves on success
-          this.token = data;
-          resolve(data);
+          // TESTING TOKEN'S CADUCITY --------------
+          // console.log("EXPIRES AT: " + data['expires_at']);
+          // data['expires_at'] = Date.parse(new Date().toISOString());
+          
+          // Check if token has expired
+          if(!this.checkExpiredToken(data)) {
+            // Save the value into a var if token still "alive"
+            this.token = data;
+            resolve(data);
+          }
+          else {
+            localForage.removeItem('token').then(() => {
+              // If token has expired, removes it and unsets the var
+              this.token = null;
+              resolve(null);
+            })
+            // Reject the error in case the token was not able to be deleted
+            .catch(err => {
+              reject(err);
+            })
+          }
         })
-        // Resolves with the error info in case there was one
+        // Handles the error retrieving token's value
         .catch(err => {
           // console.error("An error has ocurred while retrieving the token");
           reject(err);
         });
       })
+  }
+
+  // Check if token is already expired
+  private checkExpiredToken(token:any) {
+    return Date.parse(token['expires_at']) < Date.parse(new Date().toISOString());
   }
 
   // AUX function to display a popup (alert) containing error details
@@ -199,8 +223,8 @@ export class AuthenticationProvider {
     alert.present();
   }
 
-  // AUX function to display a message (toast) on success
-  private displayToast(text:string) {
+  // AUX (public) function to display a message (toast) on success
+  displayToast(text:string) {
     this.toastCtrl.create({
       message: text,
       duration: 5000,
@@ -208,8 +232,8 @@ export class AuthenticationProvider {
     }).present();
   }
 
-  // AUX function to handle error based on response type
-  private errorHandler(error: HttpErrorResponse) {
+  // AUX (public) function to handle error based on response type
+  errorHandler(error: HttpErrorResponse) {
     // Creates an empty string var
     let temp = "";
     if(error.error.error) {

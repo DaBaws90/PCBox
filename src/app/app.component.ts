@@ -31,15 +31,16 @@ export class MyApp {
       // Check if there is a token currently stored in order to set the RootPage dynamically
       this.authProv.getToken().then((token) => {
         if(token) {
-          console.log("TOKEN LOADED AT STARTUP: " + token['access_token']);
+          console.log("Token loaded at startup: " + token['access_token']);
           this.rootPage = HomePage;
         }
         else {
+          console.log("Token expired");
           this.rootPage = LoginPage;
         }
       })
       .catch(err => {
-        console.error("An error has occurred retrieving the token at startup");
+        console.error("An error has occurred retrieving the token");
       });
     });
   }

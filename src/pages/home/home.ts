@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { ProfilePage } from '../profile/profile';
 import { LoginPage } from '../login/login';
+import { ProductsProvider } from '../../providers/products/products';
 
 @Component({
   selector: 'page-home',
@@ -10,7 +11,7 @@ import { LoginPage } from '../login/login';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, public authProvider: AuthenticationProvider) {
+  constructor(public navCtrl: NavController, public authProvider: AuthenticationProvider, private prodsProvider: ProductsProvider ) {
 
   }
 
@@ -34,5 +35,16 @@ export class HomePage {
       console.error("An error occurred");
       console.error(error);
     })
+  }
+
+  indexPage() {
+    this.prodsProvider.productsIndex().then(data => {
+      console.info("Data retrieved:");
+      console.log(data);
+    })
+    .catch(err => {
+      console.error("Error at productsIndex ProdsProvider's method");
+      console.error(err);
+    });
   }
 }

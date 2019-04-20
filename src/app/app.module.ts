@@ -44,7 +44,8 @@ import { ProfilePage } from '../pages/profile/profile';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ProductsProvider,
-    AuthenticationProvider
+    AuthenticationProvider,
+    ProductsProvider
   ]
 })
 export class AppModule {}

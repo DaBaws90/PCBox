@@ -38,7 +38,7 @@ export class LoginPage {
       console.log("Brownsing to HomePage");
     })
     .catch(error => {
-      console.error("There was an error at LogIn AuthProvider's method");
+      console.error("There was an error from HTTP request at LogIn AuthProvider's method");
       console.error(error);
     });
   }
