@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthenticationProvider } from '../authentication/authentication';
-import { resolveDefinition } from '@angular/core/src/view/util';
+// import { resolveDefinition } from '@angular/core/src/view/util';
 
 /*
   Generated class for the ProductsProvider provider.
@@ -19,22 +19,24 @@ export class ProductsProvider {
   }
 
   productsIndex() {
+    // Generates a proper header
     let header = new HttpHeaders({
       "Content-Type": "application/json", 
       "Accept": "application/json", 
       'Authorization': 'Bearer ' + this.authProvider.token['access_token']
     });
-
+    // Returns a promise to sync the app's flow
     return new Promise((resolve, reject) => {
-      this.http.get(this.baseUrl + '/products', { headers: this.authProvider.header })
+      // Send HTTP Request to the specified URL
+      this.http.get(this.baseUrl + '/products', { headers: header })
+        // Subscribes and resolves the response on success
         .subscribe((response) => {
-          // console.log(response);
           resolve(response);
         }, (error) => {
+          // Handles the error and displays an info message to user
           let tmp = this.authProvider.errorHandler(error);
           this.authProvider.displayToast(tmp);
           reject(error);
-          // console.error(error);
         })
     })
   }

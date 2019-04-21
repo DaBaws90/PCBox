@@ -172,20 +172,18 @@ export class AuthenticationProvider {
       // Retrieves the token value from storage
       localForage.getItem('token')
         .then( data => {
-          // TESTING TOKEN'S CADUCITY --------------
-          // console.log("EXPIRES AT: " + data['expires_at']);
-          // data['expires_at'] = Date.parse(new Date().toISOString());
-          
           // Check if token has expired
           if(!this.checkExpiredToken(data)) {
             // Save the value into a var if token still "alive"
             this.token = data;
+            console.info("Token didn't expire yet");
             resolve(data);
           }
           else {
             localForage.removeItem('token').then(() => {
               // If token has expired, removes it and unsets the var
               this.token = null;
+              console.info("Token expired");
               resolve(null);
             })
             // Reject the error in case the token was not able to be deleted
@@ -204,6 +202,7 @@ export class AuthenticationProvider {
 
   // Check if token is already expired
   private checkExpiredToken(token:any) {
+    // Returns true if token has already expired, false if it didn't
     return Date.parse(token['expires_at']) < Date.parse(new Date().toISOString());
   }
 

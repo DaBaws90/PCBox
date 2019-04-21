@@ -30,17 +30,19 @@ export class HomePage {
     this.authProvider.getUserInfo().then((user) => {
       console.info("User retrieved");
       console.log(user);
+      // Redirects to user's profile page
       this.navCtrl.push(ProfilePage, {'user': user}, this.authProvider.transitionOpts);
     }).catch(error => {
-      console.error("An error occurred");
+      console.error("Error at getUserInfo's AuthProvider method");
       console.error(error);
     })
   }
 
   indexPage() {
     this.prodsProvider.productsIndex().then(data => {
-      console.info("Data retrieved:");
+      console.info("Categories retrieved:");
       console.log(data);
+      // Redirects to X page
     })
     .catch(err => {
       console.error("Error at productsIndex ProdsProvider's method");
