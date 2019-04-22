@@ -24,6 +24,7 @@ export class AuthenticationProvider {
 
   baseUrl:string = "https://localhost/public/api/auth";
   // baseUrl:string = "https://192.168.0.154/public/api/auth";
+  // baseUrl:string = "https://10.10.1.106/public/api/auth";
 
   token:any;
 

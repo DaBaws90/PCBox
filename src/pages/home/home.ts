@@ -43,6 +43,7 @@ export class HomePage {
       console.info("Categories retrieved:");
       console.log(data);
       // Redirects to X page
+      
     })
     .catch(err => {
       console.error("Error at productsIndex ProdsProvider's method");

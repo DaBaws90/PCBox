@@ -15,17 +15,15 @@
   <button ion-button color="dark" (click)="profile()">Ir al perfil</button>
   <button ion-button color="dark" (click)="indexPage()">Ir al index</button>
 
-  <ion-item text-center>
+  <ion-item>
     <ion-avatar item-start>
-      <img src="img/marty-avatar.png">
+      <img src="assets/imgs/índice.jpg">
     </ion-avatar>
-    <div padding-right>
       <h2>PC Box</h2>
       <p>Líderes del sector</p>
-    </div>
   </ion-item>
 
-  <img src="img/advance-card-bttf.png">
+  <img src="assets/imgs/social-pcbox.jpg">
 
   <ion-card-content>
     <p>Wait a minute. Wait a minute, Doc. Uhhh... Are you telling me that you built a time machine... out of a DeLorean?! Whoa. This is heavy.</p>
@@ -34,8 +32,8 @@
   <ion-row>
     
     <ion-col text-center padding-right>
-      <button ion-button icon-start clear small>
-        <ion-icon name="text"></ion-icon>
+      <button ion-button icon-start clear small (click)="goURL()">
+        <ion-icon name="open"></ion-icon>
         <div>Visítanos</div>
       </button>
     </ion-col>
