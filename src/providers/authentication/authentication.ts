@@ -114,7 +114,7 @@ export class AuthenticationProvider {
             console.log(error);
             let tmp = this.errorHandler(error);
             this.displayToast(tmp);
-            resolve(error);
+            reject(error);
         })
       })      
     })
@@ -207,6 +207,29 @@ export class AuthenticationProvider {
     return Date.parse(token['expires_at']) < Date.parse(new Date().toISOString());
   }
 
+  delete() {
+    localForage.removeItem('token');
+  }
+
+  /* Evaluates if token has expired and return a boolean, to easily handle different logics at certain methods 
+  / (the ones which interacts with the API via HTTP requests) */
+  // checkValidToken() {
+  //   // We need to set a var to return a boolean value, because return token !== null doesn't work (IDK why)
+  //   let temp;
+  //   // Retrieves the token in order to 'updates' its value, to find out if it has already expired
+  //   this.getToken().then(token => {
+  //     // Set the temp var with token's value
+  //     temp = token;
+  //   })
+  //   // Handles errors while retrieving token's value
+  //   .catch(error => {
+  //     console.info("An error occurred at checkValidToken method");
+  //     console.error(error);
+  //   })
+  //   // Returns a boolean
+  //   return temp !== null;
+  // }
+
   // AUX function to display a popup (alert) containing error details
   private showAlert(text:string) {
     let alert = this.alertCtrl.create({
@@ -224,7 +247,7 @@ export class AuthenticationProvider {
   }
 
   // AUX (public) function to display a message (toast) on success
-  displayToast(text:string) {
+  displayToast(text:string  = "Session expired. Please, log in again") {
     this.toastCtrl.create({
       message: text,
       duration: 5000,

@@ -1,3 +1,64 @@
 page-home {
 
+    ion-content{
+      // background-color: black !important;
+      // color: white !important;
+    }
+
+    ion-navbar{
+      // background-color: black !important;
+      // color: white !important;
+    }
+
+    h2{
+      padding: none;
+      margin: none;
+    }
+
+    .cover{
+      object-fit: cover;
+      width: 55vw;
+    }
+
+    .card-background-page {
+
+        ion-card {
+          position: relative;
+          text-align: center;
+        }
+      
+        .card-title {
+          position: absolute;
+          top: 36%;
+          font-size: 3.0em;
+          width: 100%;
+          font-weight: bold;
+          color: #fff;
+        }
+      
+        .card-subtitle {
+          font-size: 1.0em;
+          position: absolute;
+          top: 52%;
+          width: 100%;
+          color: #fff;
+        }
+      
+      }
+      
+    .icons-list{
+        list-style: none;
+        padding-left: 0;
+        padding-right: 0;
+
+        li{
+            margin-top: 1%;
+            align-content: flex-start;
+        }
+
+        ion-icon{
+            margin-right: 2%;
+        }
+    }
+
 }

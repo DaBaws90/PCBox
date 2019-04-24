@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the ProfilePage page.
@@ -31,6 +32,13 @@ export class ProfilePage {
 
   ionViewWillLoad() {
     this.user = this.navParams.get('user');
+  }
+
+  private redirectBack() {
+    this.navCtrl.pop().then(() => {
+      // this.navCtrl.setRoot(HomePage);
+      this.navCtrl.popToRoot();
+    });
   }
 
 }

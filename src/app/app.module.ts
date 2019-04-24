@@ -16,6 +16,10 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { IonicStorageModule } from '@ionic/storage';
 import { ProfilePage } from '../pages/profile/profile';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { ReferencesPage } from '../pages/references/references';
+import { CategoriesPage } from '../pages/categories/categories';
 
 @NgModule({
   declarations: [
@@ -24,6 +28,8 @@ import { ProfilePage } from '../pages/profile/profile';
     LoginPage,
     RegisterPage,
     ProfilePage,
+    ReferencesPage,
+    CategoriesPage,
   ],
   imports: [
     BrowserModule,
@@ -38,8 +44,12 @@ import { ProfilePage } from '../pages/profile/profile';
     LoginPage,
     RegisterPage,
     ProfilePage,
+    ReferencesPage,
+    CategoriesPage,
   ],
   providers: [
+    SafariViewController,
+    InAppBrowser,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},

@@ -1,47 +1,224 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="dark" text-center>
     <ion-title>
-      Ionic Blank
+      Inicio
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
-  <button ion-button color="primary" (click)="logout()">Cerrar sesión</button>
-  <button ion-button color="dark" (click)="profile()">Ir al perfil</button>
-  <button ion-button color="dark" (click)="indexPage()">Ir al index</button>
+<ion-content padding-top>
+  <div text-center>
+    <button ion-button color="primary" (click)="logout()">Cerrar sesión</button>
+    <button ion-button color="dark" (click)="profile()">Ir al perfil</button>
+    <button ion-button color="dark" (click)="indexPage()">Ir al index</button>
+    <button ion-button color="dark" (click)="deleteToken()">Delete token</button>
+  </div>
 
-  <ion-item>
-    <ion-avatar item-start>
-      <img src="assets/imgs/índice.jpg">
-    </ion-avatar>
-      <h2>PC Box</h2>
-      <p>Líderes del sector</p>
-  </ion-item>
-
-  <img src="assets/imgs/social-pcbox.jpg">
+  <ion-grid padding-top>
+    <ion-row justify-content-center align-items-center>
+      <ion-col></ion-col>
+      <ion-col align-self-center>
+        <ion-item class="centerItem">
+          <ion-avatar item-start>
+            <img src="assets/imgs/índice.jpg">
+          </ion-avatar>
+            <h2>PC Box</h2>
+            <p>Líderes del sector</p>
+        </ion-item>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+  
+  <div text-center>
+    <img class="cover" text-center src="assets/imgs/social-pcbox.jpg">
+  </div>
 
   <ion-card-content>
-    <p>Wait a minute. Wait a minute, Doc. Uhhh... Are you telling me that you built a time machine... out of a DeLorean?! Whoa. This is heavy.</p>
+    <h5 text-center>PC Box es vuestra tienda de informática</h5>
+    <ion-grid>
+      <ion-row>
+        <ion-col></ion-col>
+        <ion-col col-8>
+          <ul class="icons-list">
+
+            <li>
+              <ion-row>
+                <ion-col col-1>
+                  <ion-icon name="checkmark" item-start></ion-icon>
+                </ion-col>
+                <ion-col col-11>
+                  Porque sabemos de ordenadores y porque sabemos de tecnología.
+                </ion-col>
+              </ion-row>
+            </li>
+
+            <li>
+              <ion-row>
+                <ion-col col-1>
+                  <ion-icon name="checkmark" item-start></ion-icon>
+                </ion-col>
+                <ion-col col-11>
+                  Porque nuestros profesionales son auténticos expertos, como vosotros.
+                </ion-col>
+              </ion-row>
+            </li>
+
+            <li>
+              <ion-row>
+                <ion-col col-1>
+                  <ion-icon name="checkmark" item-start></ion-icon>
+                </ion-col>
+                <ion-col col-11>
+                  Porque podéis probar vuestra compra en nuestros Boxes de automontaje.
+                </ion-col>
+              </ion-row>
+            </li>
+
+            <li>
+              <ion-row>
+                <ion-col col-1>
+                  <ion-icon name="checkmark" item-start></ion-icon>
+                </ion-col>
+                <ion-col col-11>
+                  Porque seguimos el rapidísimo ritmo a que va el sector: por eso en nuestros centros los precios cotizan cada día, 
+                  para así trasladaros el mejor precio de mercado en todos y cada uno de nuestros productos. 
+                </ion-col>
+              </ion-row>
+            </li>
+
+            <li>
+              <ion-row>
+                <ion-col col-1>
+                  <ion-icon name="checkmark" item-start></ion-icon>
+                </ion-col>
+                <ion-col col-11>
+                  Porque seguimos las últimas tendencias y ponemos a vuestra disposición las novedades recién salidas del horno. 
+                </ion-col>
+              </ion-row>
+            </li>
+
+            <li>
+              <ion-row>
+                <ion-col col-1>
+                  <ion-icon name="checkmark" item-start></ion-icon>
+                </ion-col>
+                <ion-col col-11>
+                  Porque somos transparentes: nuestros productos van sin envases y llevan la ficha técnica correspondiente, 
+                  para que podáis conocer de primera mano las características técnicas del producto. 
+                </ion-col>
+              </ion-row>
+            </li>
+
+          </ul>
+        </ion-col>
+        <ion-col></ion-col>
+      </ion-row>
+    </ion-grid>
+    
+    <p style="font-weight: bold;" text-center>Por todo eso y mucho más, elige PC Box. Tu tienda de confianza</p>
+  </ion-card-content>
+  
+  <ion-item>
+    <ion-row padding-bottom>
+      <ion-col text-center padding-right>
+        <button ion-button icon-start clear small (click)="goURL('https://www.pcbox.com/')">
+          <ion-icon name="open"></ion-icon>
+          <div>Visítanos</div>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+            <h2 text-center>Buscador de referencias</h2>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+  <div text-center>
+    <img class="cover" src="assets/imgs/buscador-interno-tienda-online.png"/>
+  </div>
+
+  <ion-card-content>
+    <h5 text-center>Encuentre productos a partir de su código de referencia</h5>
+    <ion-grid>
+      <ion-row>
+        <ion-col></ion-col>
+        <ion-col col-8>
+          
+        </ion-col>
+        <ion-col></ion-col>
+      </ion-row>
+    </ion-grid>
+    
+    <p text-center>Comience a buscar ya!</p>
   </ion-card-content>
 
-  <ion-row>
-    
+<ion-item>
+  <ion-row padding-bottom>
     <ion-col text-center padding-right>
-      <button ion-button icon-start clear small (click)="goURL()">
-        <ion-icon name="open"></ion-icon>
-        <div>Visítanos</div>
+      <button ion-button icon-start clear small (click)="goReferences()">
+        <div>Acceder </div>
+        <ion-icon name="arrow-round-forward"></ion-icon>
       </button>
     </ion-col>
-    <!--<ion-col align-self-center text-center>
-      <ion-note>
-        11h ago
-      </ion-note>
-    </ion-col>-->
   </ion-row>
+</ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+            <h2 text-center>Buscador de categorías</h2>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+  <div text-center>
+    <img class="cover" src="assets/imgs/search-input.jpeg"/>
+  </div>
+
+  <ion-card-content>
+    <h5 text-center>Encuentre productos según su catgoría, por diferencia de precio, etc.</h5>
+    <ion-grid>
+      <ion-row>
+        <ion-col></ion-col>
+        <ion-col col-8>
+          
+        </ion-col>
+        <ion-col></ion-col>
+      </ion-row>
+    </ion-grid>
+    
+    <p text-center>Comience a buscar ya!</p>
+  </ion-card-content>
+
+<ion-item>
+  <ion-row padding-bottom>
+    <ion-col text-center padding-right>
+      <button ion-button icon-start clear small (click)="goCategories()">
+        <div>Acceder </div>
+        <ion-icon name="arrow-round-forward"></ion-icon>
+      </button>
+    </ion-col>
+  </ion-row>
+</ion-item>
+
+  <ion-grid padding>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col col-4 text-center>
+        <p>A mobile app developed by Adrian Carrasco. <br/>
+            Powered by Ionic 3 Framework&trade;. </p>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

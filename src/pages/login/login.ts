@@ -21,7 +21,7 @@ export class LoginPage {
   data = {
     email: "",
     password: "",
-    remember_me: true,
+    remember_me: false,
   };
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public authProvider: AuthenticationProvider) {
