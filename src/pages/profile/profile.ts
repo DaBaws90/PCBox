@@ -19,11 +19,6 @@ export class ProfilePage {
   user:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    
-  }
-
-  ionViewCanEnter() {
-    // console.log('ionViewCanEnter ProfilePage');
   }
 
   ionViewDidLoad() {

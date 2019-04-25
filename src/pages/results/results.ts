@@ -15,11 +15,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ResultsPage {
 
+  productsArray:any;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ResultsPage');
+  }
+
+  ionViewWillLoad() {
+    this.productsArray = this.navParams.get('productsArray');
   }
 
 }

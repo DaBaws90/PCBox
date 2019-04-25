@@ -20,6 +20,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { ReferencesPage } from '../pages/references/references';
 import { CategoriesPage } from '../pages/categories/categories';
+import { ResultsPage } from '../pages/results/results';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { CategoriesPage } from '../pages/categories/categories';
     ProfilePage,
     ReferencesPage,
     CategoriesPage,
+    ResultsPage,
   ],
   imports: [
     BrowserModule,
@@ -46,6 +48,7 @@ import { CategoriesPage } from '../pages/categories/categories';
     ProfilePage,
     ReferencesPage,
     CategoriesPage,
+    ResultsPage,
   ],
   providers: [
     SafariViewController,

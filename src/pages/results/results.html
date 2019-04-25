@@ -6,10 +6,34 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>Results</ion-title>
+    <ion-title text-center>Resultados</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+
+<div *ngIf="productsArray.error; else alternative_content">
+  <h3>Whoops! </h3>
+  <p>{{ productsArray.error }}</p>
+</div>
+<ng-template #alternative_content>
+  <ion-list>
+    <ion-item *ngFor="let product of productsArray.productsArray.products; let i = index">
+        <p text-uppercase>Producto # {{ i }} {{ product.nombre }}</p>
+      </ion-item>
+      <ion-item>
+        <p>Total PCComponentes: {{ productsArray.productsArray.totalPCC }}</p>
+      </ion-item>
+      <ion-item>
+        <p>Total PCBox: {{ productsArray.productsArray.totalPCB }}</p>
+      </ion-item>
+      <ion-item>
+        <p>Diferencia total: {{ productsArray.productsArray.totalDifference }}</p>
+      </ion-item>
+      <ion-item>
+        <p>Porcentaje total: {{ productsArray.productsArray.totalPercentage }}</p>
+      </ion-item>
+  </ion-list>
+</ng-template>
 
 </ion-content>

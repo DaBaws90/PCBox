@@ -32,6 +32,7 @@ export class LoginPage {
   }
 
   private logIn(){
+    // this.pressed = !this.pressed;
     this.authProvider.login(this.data).then((res) => {
       this.navCtrl.setRoot(HomePage);
       this.navCtrl.popToRoot(this.authProvider.transitionOpts);

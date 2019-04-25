@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AuthenticationProvider } from '../../providers/authentication/authentication';
+import { ProductsProvider } from '../../providers/products/products';
 
 /**
  * Generated class for the CategoriesPage page.
@@ -15,11 +17,19 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class CategoriesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public prodsProv: ProductsProvider,
+    public authProv: AuthenticationProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CategoriesPage');
+  }
+
+  private redirectBack() {
+    this.navCtrl.pop().then(() => {
+      // this.navCtrl.setRoot(HomePage);
+      this.navCtrl.popToRoot();
+    });
   }
 
 }

@@ -1,13 +1,19 @@
 page-home {
 
     ion-content{
-      // background-color: black !important;
       // color: white !important;
+      background: linear-gradient(90deg, rgba(241,229,234,1) 0%, rgba(196,223,228,0.944397742006959) 100%); 
+    }
+    .bckG{
+      background: rgba(255, 254, 254, 0); 
+    }
+    div.scroll-content{
+      padding-top: 7%;
     }
 
-    ion-navbar{
-      // background-color: black !important;
-      // color: white !important;
+    ion-row.row, ion-col.col, ion-grid.grid{
+      padding-left: 0;
+      padding-right: 0;
     }
 
     h2{

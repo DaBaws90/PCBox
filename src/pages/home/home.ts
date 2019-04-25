@@ -88,16 +88,41 @@ export class HomePage {
         this.loginRedirect();
       }
     })
+    .catch(err => {
+      console.error(err);
+    })
   }
 
   private goReferences() {
-    console.log("Browsing to ReferencePage");
-    this.navCtrl.push(ReferencesPage, {}, this.authProvider.transitionOpts);
+    this.authProvider.getToken().then(token => {
+      if(token !== null) {
+        console.log("Browsing to ReferencePage");
+        this.navCtrl.push(ReferencesPage, {}, this.authProvider.transitionOpts);
+      }
+      else {
+        this.loginRedirect();
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      this.authProvider.displayToast(err);
+    })
   }
 
   private goCategories() {
-    console.log("Browsing to CategoriesPage");
-    this.navCtrl.push(CategoriesPage, {}, this.authProvider.transitionOpts);
+    this.authProvider.getToken().then(token => {
+      if(token !== null) {
+        console.log("Browsing to CategoriesPage");
+        this.navCtrl.push(CategoriesPage, {}, this.authProvider.transitionOpts);
+      }
+      else {
+        this.loginRedirect();
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      this.authProvider.displayToast(err);
+    })
   }
 
   // Open the specified URL received as param
