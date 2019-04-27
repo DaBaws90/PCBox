@@ -19,19 +19,19 @@
 <ng-template #alternative_content>
   <ion-list>
     <ion-item *ngFor="let product of productsArray.productsArray.products; let i = index">
-        <p text-uppercase>Producto # {{ i }} {{ product.nombre }}</p>
+        <p text-uppercase>Producto # {{ i + 1}} {{ product.nombre }}</p>
       </ion-item>
       <ion-item>
-        <p>Total PCComponentes: {{ productsArray.productsArray.totalPCC }}</p>
+        <p>Total PCComponentes: {{ productsArray.productsArray?.totalPCC }}</p>
       </ion-item>
       <ion-item>
-        <p>Total PCBox: {{ productsArray.productsArray.totalPCB }}</p>
+        <p>Total PCBox: {{ productsArray.productsArray?.totalPCB }}</p>
       </ion-item>
       <ion-item>
-        <p>Diferencia total: {{ productsArray.productsArray.totalDifference }}</p>
+        <p>Diferencia total: {{ productsArray.productsArray?.totalDifference !== null ? productsArray.productsArray?.totalDifference : '-----' }}</p>
       </ion-item>
       <ion-item>
-        <p>Porcentaje total: {{ productsArray.productsArray.totalPercentage }}</p>
+        <p>Porcentaje total: {{ productsArray.productsArray?.totalPercentage !== null ? productsArray.productsArray?.totalPercentage : '-----'}}</p>
       </ion-item>
   </ion-list>
 </ng-template>

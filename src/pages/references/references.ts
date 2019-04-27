@@ -43,7 +43,8 @@ export class ReferencesPage {
         })
         .catch(err => {
           console.error(err);
-          this.authProv.displayToast(err);
+          let tmp = this.authProv.errorHandler(err);
+          this.authProv.displayToast(tmp);
         })
       }
       else {
@@ -52,7 +53,8 @@ export class ReferencesPage {
     })
     .catch(err => {
       console.error(err);
-      this.authProv.displayToast(err);
+      let tmp = this.authProv.errorHandler(err);
+      this.authProv.displayToast(tmp);
     })
   }
 

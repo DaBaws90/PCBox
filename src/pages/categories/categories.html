@@ -5,11 +5,99 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
-    <ion-title>Categories</ion-title>
+  <ion-navbar hideBackButton>
+    <ion-title text-center margin-right>Buscador de categorías</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="redirectBack()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+  
+  <ion-grid>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col col-10 text-center>
+        Seleccione una categoría del listado o ninguna para realizar una búsqueda global
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+  
+  <ion-item padding>
+    <ion-label>Categorías</ion-label>
+    <ion-select [(ngModel)]="data.category">
+      <ion-option value="0" selected>Seleccione...</ion-option>
+      <ion-option *ngFor="let category of categoriesArray" [value]="category.id_familia">{{ category.familia }}</ion-option>
+    </ion-select>
+  </ion-item>
 
+  <ion-grid>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col col-10 text-center>
+        Mostrar artículos cuyo precio:
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-list radio-group padding (ionChange)="setComparison($event)">
+    <ion-item>
+      <ion-label>PC Box <= PcComponentes</ion-label>
+      <ion-radio value="lesser"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>PC Box > PcComponentes</ion-label>
+      <ion-radio value="greater"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Todos</ion-label>
+      <ion-radio value="all" checked></ion-radio>
+    </ion-item>
+  </ion-list>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col col-10 text-center>
+        Mostrar artículos con una diferencia de precio máxima de:
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-item>
+    <ion-label>Porcentaje</ion-label>
+    <ion-input type="number" step="0.1" min="1" max="100" [(ngModel)]="data.percentage"></ion-input>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col col-10 text-center>
+        Busque productos que contengan la(s) siguiente(s) palabra(s) clave:
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-item>
+    <ion-label floating>Palabra(s) clave</ion-label>
+    <ion-input type="text" [(ngModel)]="data.keyword"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label floating>O esta(s)</ion-label>
+    <ion-input type="text" [(ngModel)]="data.keyword1"></ion-input>
+  </ion-item>
+
+  <div padding text-center>
+    <button ion-button icon-end block round outline (click)="categories()">Buscar
+      <ion-icon name="search"></ion-icon>
+    </button>
+  </div>
 </ion-content>

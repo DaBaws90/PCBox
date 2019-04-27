@@ -57,4 +57,20 @@ export class ProductsProvider {
       });
     });
   }
+
+  categoriesSearch(data:any) {
+    // Returns a promise to sync the app's flow
+    return new Promise((resolve, reject) => {
+      // Send HTTP Request to the specified URL
+      this.http.post(this.baseUrl + '/catSearch', JSON.stringify(data), { headers: this.header })
+        .subscribe(response => {
+          resolve(response);
+        }, error => {
+          // Handles the error and displays an info message to user
+          let tmp = this.authProvider.errorHandler(error);
+          this.authProvider.displayToast(tmp);
+          reject(error);
+      });
+    });
+  }
 }

@@ -112,8 +112,14 @@ export class HomePage {
   private goCategories() {
     this.authProvider.getToken().then(token => {
       if(token !== null) {
-        console.log("Browsing to CategoriesPage");
-        this.navCtrl.push(CategoriesPage, {}, this.authProvider.transitionOpts);
+        this.prodsProvider.productsIndex().then(data => {
+          console.log("Browsing to CategoriesPage");
+          this.navCtrl.push(CategoriesPage, {'categories': data['categories'] }, this.authProvider.transitionOpts);
+        })
+        .catch(err => {
+          console.error(err);
+          this.authProvider.displayToast(err);
+        })
       }
       else {
         this.loginRedirect();
