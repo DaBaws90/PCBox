@@ -34,6 +34,10 @@ export class LoginPage {
   private logIn(){
     // this.pressed = !this.pressed;
     this.authProvider.login(this.data).then((res) => {
+      /* 
+        Cuando obtenga el resultado, llamamos al dismiss del spinner y continuamos con la ejecucion. 
+        Re-habilitamos botón de login, por si datos fueron errones
+      */
       this.navCtrl.setRoot(HomePage);
       this.navCtrl.popToRoot(this.authProvider.transitionOpts);
       console.log("Brownsing to HomePage");

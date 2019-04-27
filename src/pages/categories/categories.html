@@ -17,7 +17,7 @@
 
 <ion-content padding>
   
-  <ion-grid>
+  <ion-grid padding-top>
     <ion-row>
       <ion-col></ion-col>
       <ion-col col-10 text-center>
@@ -35,7 +35,7 @@
     </ion-select>
   </ion-item>
 
-  <ion-grid>
+  <ion-grid padding-top>
     <ion-row>
       <ion-col></ion-col>
       <ion-col col-10 text-center>
@@ -45,22 +45,32 @@
     </ion-row>
   </ion-grid>
 
-  <ion-list radio-group padding (ionChange)="setComparison($event)">
-    <ion-item>
-      <ion-label>PC Box <= PcComponentes</ion-label>
-      <ion-radio value="lesser"></ion-radio>
-    </ion-item>
-    <ion-item>
-      <ion-label>PC Box > PcComponentes</ion-label>
-      <ion-radio value="greater"></ion-radio>
-    </ion-item>
-    <ion-item>
-      <ion-label>Todos</ion-label>
-      <ion-radio value="all" checked></ion-radio>
-    </ion-item>
-  </ion-list>
-
-  <ion-grid>
+  <ion-grid padding-top>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col col-10>
+      
+        <ion-list radio-group padding (ionChange)="setComparison($event)">
+          <ion-item>
+            <ion-label>PC Box <= PcComponentes</ion-label>
+            <ion-radio value="lesser"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>PC Box > PcComponentes</ion-label>
+            <ion-radio value="greater"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>Todos</ion-label>
+            <ion-radio value="all" checked></ion-radio>
+          </ion-item>
+        </ion-list>
+      
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+  
+  <ion-grid padding-top>
     <ion-row>
       <ion-col></ion-col>
       <ion-col col-10 text-center>
@@ -70,12 +80,22 @@
     </ion-row>
   </ion-grid>
 
-  <ion-item>
-    <ion-label>Porcentaje</ion-label>
-    <ion-input type="number" step="0.1" min="1" max="100" [(ngModel)]="data.percentage"></ion-input>
-  </ion-item>
+  <!-- <ion-grid padding-top>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col col-10> -->
 
-  <ion-grid>
+        <ion-item padding>
+          <ion-label>Porcentaje</ion-label>
+          <ion-input type="number" step="0.1" min="1" max="100" [(ngModel)]="data.percentage"></ion-input>
+        </ion-item>
+      
+      <!-- </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid> -->
+  
+  <ion-grid padding-top>
     <ion-row>
       <ion-col></ion-col>
       <ion-col col-10 text-center>
@@ -85,19 +105,38 @@
     </ion-row>
   </ion-grid>
 
-  <ion-item>
-    <ion-label floating>Palabra(s) clave</ion-label>
-    <ion-input type="text" [(ngModel)]="data.keyword"></ion-input>
-  </ion-item>
+<!--   <ion-grid padding-top>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col col-10> -->
+        
+        <ion-item padding>
+          <ion-label floating>Palabra(s) clave</ion-label>
+          <ion-input type="text" [(ngModel)]="data.keyword"></ion-input>
+        </ion-item>
 
-  <ion-item>
-    <ion-label floating>O esta(s)</ion-label>
-    <ion-input type="text" [(ngModel)]="data.keyword1"></ion-input>
-  </ion-item>
+        <ion-item padding>
+          <ion-label floating>O esta(s)</ion-label>
+          <ion-input type="text" [(ngModel)]="data.keyword1"></ion-input>
+        </ion-item>
 
-  <div padding text-center>
-    <button ion-button icon-end block round outline (click)="categories()">Buscar
-      <ion-icon name="search"></ion-icon>
-    </button>
-  </div>
+        <ion-grid>
+          <ion-row>
+            <ion-col></ion-col>
+            <ion-col>
+              <div padding text-center>
+                <button ion-button icon-end block round outline (click)="categories()">Buscar
+                  <ion-icon name="search"></ion-icon>
+                </button>
+              </div>
+            </ion-col>
+            <ion-col></ion-col>
+          </ion-row>
+        </ion-grid>
+
+      <!-- </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid> -->
+
 </ion-content>
