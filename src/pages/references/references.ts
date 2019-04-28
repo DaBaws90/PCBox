@@ -35,7 +35,8 @@ export class ReferencesPage {
   // Manages the referencesSearch HTTP request
   private references() {
     // Present a spinner on method's call
-    this.authProv.loadingCtrl.create( this.authProv.loadingOpts ).present();
+    const spinner = this.authProv.spinner();
+    spinner.present();
     // Check if token is still valid
     this.authProv.getToken().then(token => {
       if(token !== null) {
@@ -47,6 +48,7 @@ export class ReferencesPage {
         })
         // Handles errors on HTTP request
         .catch(err => {
+          spinner.dismiss();
           // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
           console.error(err);
           let tmp = this.authProv.errorHandler(err);
@@ -60,6 +62,7 @@ export class ReferencesPage {
     })
     // Handles errors on token retrieving
     .catch(err => {
+      spinner.dismiss();
       // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
       console.error(err);
       let tmp = this.authProv.errorHandler(err);

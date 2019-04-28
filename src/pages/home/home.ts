@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, Platform } from 'ionic-angular';
+import { NavController, Platform, Spinner } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { ProfilePage } from '../profile/profile';
 import { LoginPage } from '../login/login';
@@ -23,6 +23,10 @@ export class HomePage {
 
   // Handles logout HTTP request
   logout() {
+    // Present a spinner on method's call
+    const spinner = this.authProvider.spinner();
+    spinner.present();
+    // Handles logout HTTP request
     this.authProvider.logout().then(() => {
       // Sets LoginPage as RootPage in LogOut action
       this.navCtrl.setRoot(LoginPage);
@@ -30,6 +34,7 @@ export class HomePage {
     })
     // Handles errors on HTTP request
     .catch(err => {
+      spinner.dismiss();
       console.error("An errror occurred at logout's AuthProvider method");
       console.error(err);
     });
@@ -38,7 +43,8 @@ export class HomePage {
   // Handles getUserInfo HTTP request
   profile() {
     // Present a spinner on method's call
-    this.authProvider.loadingCtrl.create( this.authProvider.loadingOpts ).present();
+    const spinner = this.authProvider.spinner();
+    spinner.present();
     // Check if token is still valid
     this.authProvider.getToken().then((token) => {
       if(token !== null) {
@@ -49,6 +55,7 @@ export class HomePage {
         })
         // Handles errors on user's info retrieving
         .catch(error => {
+          spinner.dismiss();
           console.error("Error at getUserInfo's AuthProvider method");
           console.error(error);
         })
@@ -60,6 +67,7 @@ export class HomePage {
     })
     // Handles errors on token retrieving
     .catch(err => {
+      spinner.dismiss();
       // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
       console.error(err);
       let temp = this.authProvider.errorHandler(err);
@@ -77,7 +85,8 @@ export class HomePage {
   // Navigates to ReferencesPage
   private goReferences() {
     // Present a spinner on method's call
-    this.authProvider.loadingCtrl.create( this.authProvider.loadingOpts ).present();
+    const spinner = this.authProvider.spinner();
+    spinner.present();
     // Check if token is still valid
     this.authProvider.getToken().then(token => {
       if(token !== null) {
@@ -92,6 +101,7 @@ export class HomePage {
     })
     // Handles errors on token retrieving
     .catch(err => {
+      spinner.dismiss();
       // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
       console.error(err);
       let temp = this.authProvider.errorHandler(err);
@@ -102,7 +112,8 @@ export class HomePage {
   // Navigates to CategoriesPage
   private goCategories() {
     // Present a spinner on method's call
-    this.authProvider.loadingCtrl.create( this.authProvider.loadingOpts ).present();
+    const spinner = this.authProvider.spinner();
+    spinner.present();
     // Check if token is still valid
     this.authProvider.getToken().then(token => {
       if(token !== null) {
@@ -114,6 +125,7 @@ export class HomePage {
         })
         // Handles errors on categories list retrieving
         .catch(err => {
+          spinner.dismiss();
           // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
           console.error(err);
           let temp = this.authProvider.errorHandler(err);
@@ -127,6 +139,7 @@ export class HomePage {
     })
     // Handles errors on token retrieving
     .catch(err => {
+      spinner.dismiss()
       // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
       console.error(err);
       let temp = this.authProvider.errorHandler(err);

@@ -35,7 +35,8 @@ export class LoginPage {
   // Manages the LogIn HTTP request
   private logIn(){
     // Present a spinner on method's call
-    this.authProvider.loadingCtrl.create( this.authProvider.loadingOpts ).present();
+    const spinner = this.authProvider.spinner();
+    spinner.present();
     // Calls the AuthProvider's method to manage the login request
     this.authProvider.login(this.data).then((res) => {
       // Set HomePage as root
@@ -46,6 +47,7 @@ export class LoginPage {
     })
     // Handles errors at login's request
     .catch(error => {
+      spinner.dismiss();
       console.error("There was an error from HTTP request at LogIn AuthProvider's method");
       console.error(error);
     });

@@ -17,7 +17,7 @@
   <p>{{ productsArray.error }}</p>
 </div>
 <ng-template #alternative_content>
-  <ion-list>
+  <!--<ion-list>
     <ion-item *ngFor="let product of productsArray.productsArray.products; let i = index">
         <p text-uppercase>Producto # {{ i + 1}} {{ product.nombre }}</p>
       </ion-item>
@@ -33,7 +33,19 @@
       <ion-item>
         <p>Porcentaje total: {{ productsArray.productsArray?.totalPercentage !== null ? productsArray.productsArray?.totalPercentage : '-----'}}</p>
       </ion-item>
-  </ion-list>
+  </ion-list>-->
+  <div>
+    <ngx-datatable
+       [sortType]="'multi'"
+       [headerHeight]="50"
+       [footerHeight]="50"
+       [rowHeight]="50"
+       [rows]="rows"
+       [columns]="columns"
+       [columnMode]="'force'"
+       [limit]="10">
+     </ngx-datatable>
+  </div>
 </ng-template>
 
 </ion-content>

@@ -45,7 +45,8 @@ export class CategoriesPage {
   // Manages the categoriesSearch HTTP request
   private categories() {
     // Present a spinner on method's call
-    this.authProv.loadingCtrl.create( this.authProv.loadingOpts ).present();
+    const spinner = this.authProv.spinner();
+    spinner.present();
     // Check if token is still valid
     this.authProv.getToken().then(token => {
       if(token !== null) {
@@ -57,6 +58,7 @@ export class CategoriesPage {
         })
         // Handles errors at register's request
         .catch(err => {
+          spinner.dismiss();
           // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
           console.error(err);
           let tmp = this.authProv.errorHandler(err);
@@ -70,6 +72,7 @@ export class CategoriesPage {
     })
     // Handles errors on token retrieving
     .catch(err => {
+      spinner.dismiss();
       // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
       console.error(err);
       let tmp = this.authProv.errorHandler(err);

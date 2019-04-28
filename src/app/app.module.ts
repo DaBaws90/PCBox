@@ -22,6 +22,8 @@ import { ReferencesPage } from '../pages/references/references';
 import { CategoriesPage } from '../pages/categories/categories';
 import { ResultsPage } from '../pages/results/results';
 
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -36,6 +38,7 @@ import { ResultsPage } from '../pages/results/results';
   imports: [
     BrowserModule,
     HttpClientModule,
+    NgxDatatableModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
   ],

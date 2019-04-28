@@ -238,6 +238,10 @@ export class AuthenticationProvider {
     }).present();
   }
 
+  spinner() {
+    return this.loadingCtrl.create( this.loadingOpts );
+  }
+
   // AUX (public) function to handle error based on response type
   errorHandler(error: HttpErrorResponse) {
     // Creates an empty string var

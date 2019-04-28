@@ -16,7 +16,17 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 export class ResultsPage {
 
   productsArray:any;
+  columns:any;
+  rows:any;
+  
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.columns = [
+      { prop: 'codigo' },
+      { name: 'nombre' },
+      { name: 'precio' },
+      { name: 'precioPccomp'},
+      { name: 'enlace' },
+    ];
   }
 
   ionViewDidLoad() {
@@ -25,6 +35,8 @@ export class ResultsPage {
 
   ionViewWillLoad() {
     this.productsArray = this.navParams.get('productsArray');
+    this.rows = this.productsArray['products'];
+    console.warn(this.productsArray['products']);
   }
 
 }

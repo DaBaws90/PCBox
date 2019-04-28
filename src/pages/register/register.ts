@@ -39,7 +39,8 @@ export class RegisterPage {
   // Manages the register HTTP request
   private signUp() {
     // Present a spinner on method's call
-    this.authProv.loadingCtrl.create( this.authProv.loadingOpts ).present();
+    const spinner = this.authProv.spinner();
+    spinner.present();
     // Calls the AuthProvider's method to manage the register request
     this.authProv.register(this.myForm.value).then((data) => {
       // Navigates to RootPage
@@ -48,6 +49,7 @@ export class RegisterPage {
     })
     // Handles errors at register's request
     .catch(err => {
+      spinner.dismiss();
       console.error("There was an error at AuthProvider register's method");
       console.error(err);
     })
