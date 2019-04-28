@@ -21,40 +21,49 @@ export class HomePage {
 
   }
 
-  ionViewWillLoad() {
-    // this.navCtrl.setRoot(HomePage);
-  }
-
+  // Handles logout HTTP request
   logout() {
     this.authProvider.logout().then(() => {
       // Sets LoginPage as RootPage in LogOut action
       this.navCtrl.setRoot(LoginPage);
       this.navCtrl.popToRoot();
-      // Handles possible error
-    }).catch(err => {
+    })
+    // Handles errors on HTTP request
+    .catch(err => {
       console.error("An errror occurred at logout's AuthProvider method");
       console.error(err);
     });
   }
 
+  // Handles getUserInfo HTTP request
   profile() {
+    // Present a spinner on method's call
+    this.authProvider.loadingCtrl.create( this.authProvider.loadingOpts ).present();
+    // Check if token is still valid
     this.authProvider.getToken().then((token) => {
       if(token !== null) {
+        // Calls the AuthProvider's method to manage the getUserInfo request
         this.authProvider.getUserInfo().then((user) => {
-          console.info("User retrieved");
-          console.log(user);
           // Redirects to user's profile page
           this.navCtrl.push(ProfilePage, {'user': user});
         })
+        // Handles errors on user's info retrieving
         .catch(error => {
           console.error("Error at getUserInfo's AuthProvider method");
           console.error(error);
         })
       }
       else {
-        // Calls AUX function to handle redirect
+        // Token's value is null, so session has already expired => Redirects to LoginPage
         this.loginRedirect();
       }
+    })
+    // Handles errors on token retrieving
+    .catch(err => {
+      // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
+      console.error(err);
+      let temp = this.authProvider.errorHandler(err);
+      this.authProvider.displayToast(temp);
     })
   }
 
@@ -65,69 +74,63 @@ export class HomePage {
     this.navCtrl.popToRoot();
   }
 
-  deleteToken() {
-    this.authProvider.delete();
-  }
-
-  indexPage() {
-    this.authProvider.getToken().then((token) => {
-      if(token !== null) {
-        this.prodsProvider.productsIndex().then(data => {
-          console.info("Categories retrieved:");
-          console.log(data);
-          // Redirects to X page
-
-        })
-        .catch(err => {
-          console.error("Error at productsIndex ProdsProvider's method");
-          console.error(err);
-        });
-      }
-      else {
-        // Calls AUX function to handle redirect
-        this.loginRedirect();
-      }
-    })
-    .catch(err => {
-      console.error(err);
-    })
-  }
-
+  // Navigates to ReferencesPage
   private goReferences() {
+    // Present a spinner on method's call
+    this.authProvider.loadingCtrl.create( this.authProvider.loadingOpts ).present();
+    // Check if token is still valid
     this.authProvider.getToken().then(token => {
       if(token !== null) {
+        // Navigates to ReferencesPage
         console.log("Browsing to ReferencePage");
         this.navCtrl.push(ReferencesPage, {}, this.authProvider.transitionOpts);
       }
       else {
+        // Token's value is null, so session has already expired => Redirects to LoginPage
         this.loginRedirect();
       }
     })
+    // Handles errors on token retrieving
     .catch(err => {
+      // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
       console.error(err);
-      this.authProvider.displayToast(err);
+      let temp = this.authProvider.errorHandler(err);
+      this.authProvider.displayToast(temp);
     })
   }
 
+  // Navigates to CategoriesPage
   private goCategories() {
+    // Present a spinner on method's call
+    this.authProvider.loadingCtrl.create( this.authProvider.loadingOpts ).present();
+    // Check if token is still valid
     this.authProvider.getToken().then(token => {
       if(token !== null) {
+        // Calls the ProductsProvider's method to manage the getCategoriesList request
         this.prodsProvider.productsIndex().then(data => {
+          // Navigates to CategoriesPage
           console.log("Browsing to CategoriesPage");
           this.navCtrl.push(CategoriesPage, {'categories': data['categories'] }, this.authProvider.transitionOpts);
         })
+        // Handles errors on categories list retrieving
         .catch(err => {
+          // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
           console.error(err);
-          this.authProvider.displayToast(err);
+          let temp = this.authProvider.errorHandler(err);
+          this.authProvider.displayToast(temp);
         })
       }
       else {
+        // Token's value is null, so session has already expired => Redirects to LoginPage
         this.loginRedirect();
       }
     })
+    // Handles errors on token retrieving
     .catch(err => {
+      // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
       console.error(err);
-      this.authProvider.displayToast(err);
+      let temp = this.authProvider.errorHandler(err);
+      this.authProvider.displayToast(temp);
     })
   }
 
@@ -136,8 +139,7 @@ export class HomePage {
     // If plaftorm is native (cordova), uses SafariViewController
     if(this.platform.is('cordova')) {
       // Check if safariViewController is available
-      this.safariCtrl.isAvailable()
-        .then((available: boolean) => {
+      this.safariCtrl.isAvailable().then((available: boolean) => {
           // If it does =>
           if (available) {
             // Configures and opens brownser's tab
@@ -153,9 +155,9 @@ export class HomePage {
             .subscribe((result: any) => {
                 console.info("URL opened with SafariViewController");
                 console.info(result);
-                if(result.event === 'opened') console.log('Opened');
-                else if(result.event === 'loaded') console.log('Loaded');
-                else if(result.event === 'closed') console.log('Closed');
+                // if(result.event === 'opened') console.log('Opened');
+                // else if(result.event === 'loaded') console.log('Loaded');
+                // else if(result.event === 'closed') console.log('Closed');
               },
               // Handles the error
               (error: any) => {

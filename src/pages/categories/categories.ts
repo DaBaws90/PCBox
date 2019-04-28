@@ -38,33 +38,46 @@ export class CategoriesPage {
   }
 
   ionViewWillLoad() {
+    // Gets categoriesLit passed as param on push nav
     this.categoriesArray = this.navParams.get('categories');
   }
 
+  // Manages the categoriesSearch HTTP request
   private categories() {
+    // Present a spinner on method's call
+    this.authProv.loadingCtrl.create( this.authProv.loadingOpts ).present();
+    // Check if token is still valid
     this.authProv.getToken().then(token => {
       if(token !== null) {
+        // Calls the ProdutsProvider's method to manage the categoriesSearch request
         this.prodsProv.categoriesSearch(this.data).then(response => {
-          console.info(response);
+          // console.info(response);
+          // Navigates to ResultsPage
           this.navCtrl.push( ResultsPage, {'productsArray': response}, this.authProv.transitionOpts )
         })
+        // Handles errors at register's request
         .catch(err => {
+          // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
           console.error(err);
           let tmp = this.authProv.errorHandler(err);
           this.authProv.displayToast(tmp);
         })
       }
       else {
+        // Token's value is null, so session has already expired => Redirects to LoginPage
         this.loginRedirect();
       }
     })
+    // Handles errors on token retrieving
     .catch(err => {
+      // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
       console.error(err);
       let tmp = this.authProv.errorHandler(err);
       this.authProv.displayToast(tmp);
     })
   }
 
+  // Sets comparison value on input radio select
   private setComparison(event:any) {
     this.data.comparison = event;
   }
@@ -76,9 +89,9 @@ export class CategoriesPage {
     this.navCtrl.popToRoot();
   }
 
+  // Replaces back button functionality to avoid some weird malfunctioning (I don't know why though)
   private redirectBack() {
     this.navCtrl.pop().then(() => {
-      // this.navCtrl.setRoot(HomePage);
       this.navCtrl.popToRoot();
     });
   }

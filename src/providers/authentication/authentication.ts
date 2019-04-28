@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { AlertController, ToastController, NavController } from 'ionic-angular';
+import { AlertController, ToastController, NavController, LoadingController } from 'ionic-angular';
 
 // import { Observable } from 'rxjs/Observable';
 // import 'rxjs/add/observable/fromPromise';
@@ -33,7 +33,14 @@ export class AuthenticationProvider {
     duration: 1000,
   };
 
-  constructor(public http: HttpClient, private storage: Storage, public alertCtrl: AlertController, public toastCtrl: ToastController) {
+  loadingOpts = {
+    content: 'Loading. Please, wait.',
+    spinner: 'crescent',
+    dismissOnPageChange: true,
+  };
+
+  constructor(public http: HttpClient, private storage: Storage, public alertCtrl: AlertController, public toastCtrl: ToastController,
+    public loadingCtrl: LoadingController) {
     console.log('Hello AuthenticationProvider Provider');
     localForage.config({
       name: 'MyApp'
@@ -120,7 +127,7 @@ export class AuthenticationProvider {
     })
   }
 
-  // Retrieves the current authenticated user's info
+  // Retrieves the current authenticated user's info (ProfilePage method)
   getUserInfo() {
     return new Promise((resolve, reject) => {
       // Sets the headers properly
@@ -129,14 +136,13 @@ export class AuthenticationProvider {
         "Accept": "application/json", 
         'Authorization': 'Bearer ' + this.token['access_token']
       });
-      // Send a HTTP Request to the specified URL
+      // Sends a HTTP request to the specified URL
       this.http.get(this.baseUrl + '/user', { headers: header})
         // Subscribs and resolves the response on success
         .subscribe((response) => {
-          // console.log(response);
           resolve(response);
         }, error => {
-          // Handles the error and displays an info message to user
+          // Handles the error and displays a message to user. Then, rejects the error
           console.error("Error at getUserInfo method");
           let tmp = this.errorHandler(error);
           this.displayToast(tmp);
@@ -207,31 +213,8 @@ export class AuthenticationProvider {
     return Date.parse(token['expires_at']) < Date.parse(new Date().toISOString());
   }
 
-  delete() {
-    localForage.removeItem('token');
-  }
-
-  /* Evaluates if token has expired and return a boolean, to easily handle different logics at certain methods 
-  / (the ones which interacts with the API via HTTP requests) */
-  // checkValidToken() {
-  //   // We need to set a var to return a boolean value, because return token !== null doesn't work (IDK why)
-  //   let temp;
-  //   // Retrieves the token in order to 'updates' its value, to find out if it has already expired
-  //   this.getToken().then(token => {
-  //     // Set the temp var with token's value
-  //     temp = token;
-  //   })
-  //   // Handles errors while retrieving token's value
-  //   .catch(error => {
-  //     console.info("An error occurred at checkValidToken method");
-  //     console.error(error);
-  //   })
-  //   // Returns a boolean
-  //   return temp !== null;
-  // }
-
   // AUX function to display a popup (alert) containing error details
-  private showAlert(text:string) {
+  showAlert(text:string) {
     let alert = this.alertCtrl.create({
       title: "Something went wrong!",
       subTitle: text,
@@ -246,7 +229,7 @@ export class AuthenticationProvider {
     alert.present();
   }
 
-  // AUX (public) function to display a message (toast) on success
+  // AUX (public) function to display a message (toast) on success *OVERLOAD + 1*
   displayToast(text:string  = "Session expired. Please, log in again") {
     this.toastCtrl.create({
       message: text,
@@ -259,6 +242,7 @@ export class AuthenticationProvider {
   errorHandler(error: HttpErrorResponse) {
     // Creates an empty string var
     let temp = "";
+
     if(error.error.error) {
       if (error.error instanceof ErrorEvent) {
         // A client-side or network error occurred. Handle it accordingly.

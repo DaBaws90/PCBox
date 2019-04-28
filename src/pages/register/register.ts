@@ -16,6 +16,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
   templateUrl: 'register.html',
 })
 export class RegisterPage {
+
   myForm: FormGroup;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public authProv:AuthenticationProvider,
@@ -35,13 +36,17 @@ export class RegisterPage {
     console.log('ionViewDidLoad RegisterPage');
   }
 
-  // Manages the register HTTP Request call
+  // Manages the register HTTP request
   private signUp() {
+    // Present a spinner on method's call
+    this.authProv.loadingCtrl.create( this.authProv.loadingOpts ).present();
     // Calls the AuthProvider's method to manage the register request
     this.authProv.register(this.myForm.value).then((data) => {
+      // Navigates to RootPage
       console.info("Success on SignUp -> Redirecting to RootPage");
       this.navCtrl.popToRoot();
     })
+    // Handles errors at register's request
     .catch(err => {
       console.error("There was an error at AuthProvider register's method");
       console.error(err);

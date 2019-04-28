@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { RegisterPage } from '../register/register';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { HomePage } from '../home/home';
@@ -24,35 +24,39 @@ export class LoginPage {
     remember_me: false,
   };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public authProvider: AuthenticationProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public authProvider: AuthenticationProvider, 
+    private loadingCtrl: LoadingController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
 
+  // Manages the LogIn HTTP request
   private logIn(){
-    // this.pressed = !this.pressed;
+    // Present a spinner on method's call
+    this.authProvider.loadingCtrl.create( this.authProvider.loadingOpts ).present();
+    // Calls the AuthProvider's method to manage the login request
     this.authProvider.login(this.data).then((res) => {
-      /* 
-        Cuando obtenga el resultado, llamamos al dismiss del spinner y continuamos con la ejecucion. 
-        Re-habilitamos botón de login, por si datos fueron errones
-      */
+      // Set HomePage as root
       this.navCtrl.setRoot(HomePage);
+      // Navigates to HomePage
       this.navCtrl.popToRoot(this.authProvider.transitionOpts);
       console.log("Brownsing to HomePage");
     })
+    // Handles errors at login's request
     .catch(error => {
       console.error("There was an error from HTTP request at LogIn AuthProvider's method");
       console.error(error);
     });
   }
 
+  // Set remember_me value on checkbox's click
   private setRemember() {
     this.data.remember_me = !this.data.remember_me;
-    console.log("REMEMBER ME? -> " + this.data.remember_me);
   }
 
+  // Navigates to RegisterPage
   private goToRegister() {
     this.navCtrl.push(RegisterPage, {}, this.authProvider.transitionOpts);
   }
