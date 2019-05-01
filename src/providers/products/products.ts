@@ -13,6 +13,7 @@ import { AuthenticationProvider } from '../authentication/authentication';
 export class ProductsProvider {
 
   baseUrl = "https://localhost/public/api/products";
+  // baseUrl = "https://192.168.2.6/public/api/products";
 
   // Generates a proper header
   header = new HttpHeaders({

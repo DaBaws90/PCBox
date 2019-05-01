@@ -23,7 +23,7 @@ export class AuthenticationProvider {
   header = new HttpHeaders({ "Content-Type": "application/json", "Accept": "application/json" });
 
   baseUrl:string = "https://localhost/public/api/auth";
-  // baseUrl:string = "https://192.168.0.154/public/api/auth";
+  // baseUrl:string = "https://192.168.2.6/public/api/auth";
   // baseUrl:string = "https://10.10.1.106/public/api/auth";
 
   token:any;

@@ -17,34 +17,27 @@
   <p>{{ productsArray.error }}</p>
 </div>
 <ng-template #alternative_content>
-  <!--<ion-list>
-    <ion-item *ngFor="let product of productsArray.productsArray.products; let i = index">
-        <p text-uppercase>Producto # {{ i + 1}} {{ product.nombre }}</p>
-      </ion-item>
-      <ion-item>
-        <p>Total PCComponentes: {{ productsArray.productsArray?.totalPCC }}</p>
-      </ion-item>
-      <ion-item>
-        <p>Total PCBox: {{ productsArray.productsArray?.totalPCB }}</p>
-      </ion-item>
-      <ion-item>
-        <p>Diferencia total: {{ productsArray.productsArray?.totalDifference !== null ? productsArray.productsArray?.totalDifference : '-----' }}</p>
-      </ion-item>
-      <ion-item>
-        <p>Porcentaje total: {{ productsArray.productsArray?.totalPercentage !== null ? productsArray.productsArray?.totalPercentage : '-----'}}</p>
-      </ion-item>
-  </ion-list>-->
   <div>
     <ngx-datatable
-       [sortType]="'multi'"
-       [headerHeight]="50"
-       [footerHeight]="50"
-       [rowHeight]="50"
-       [rows]="rows"
-       [columns]="columns"
-       [columnMode]="'force'"
-       [limit]="10">
+      class="material striped fullscreen"
+        [sortType]="'multi'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="50"
+        [rows]="rows"
+        [columns]="columns"
+        [columnMode]="'flex'"
+        [limit]="10"
+        [scrollbarV]="true"
+        [scrollbarH]="true">
+        <ngx-datatable-column name="Código" [flexGrow]="1" prop="codigo"></ngx-datatable-column>
+        <ngx-datatable-column name="Nombre" [flexGrow]="5" prop="nombre"></ngx-datatable-column>
+        <ngx-datatable-column name="Precio PCBox" [flexGrow]="1" prop="precio"></ngx-datatable-column>
+        <ngx-datatable-column name="Precio PCComp" [flexGrow]="1" prop="precioPccomp"></ngx-datatable-column>
+        <ngx-datatable-column name="Diferencia" [flexGrow]="1" prop="difference"></ngx-datatable-column>
+        <ngx-datatable-column name="Porcentaje" [flexGrow]="1" prop="percentage"></ngx-datatable-column>
      </ngx-datatable>
+     
   </div>
 </ng-template>
 

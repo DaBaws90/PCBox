@@ -21,10 +21,13 @@ export class ResultsPage {
   
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.columns = [
-      { prop: 'codigo', name: 'Codigo' },
-      { prop: 'nombre', name: 'nombre' },
+      { prop: 'codigo', name: 'Código' },
+      { prop: 'nombre', name: 'Nombre', width: '400' },
       { prop: 'precio', name: 'Precio PCBox' },
-      { prop: 'precioPccomp', name: 'Precio PCComponentes'},
+      { prop: 'precioPccomp', name: 'Precio PCComponentes' },
+      { prop: 'difference', name: 'Diferencia' },
+      { prop: 'percentage', name: 'Porcentaje' },
+      
     ];
   }
 
@@ -35,9 +38,11 @@ export class ResultsPage {
   ionViewWillLoad() {
     this.productsArray = this.navParams.get('productsArray');
 
-    this.productsArray['productsArray']['products'].forEach(product => {
-      this.rows.push(product);
-    });
+    try {
+      this.rows = this.productsArray['productsArray']['products'];
+    } catch (error) {
+      console.error(error);
+    }
   }
 
 }
