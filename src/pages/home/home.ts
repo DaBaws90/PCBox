@@ -21,60 +21,6 @@ export class HomePage {
 
   }
 
-  // Handles logout HTTP request
-  logout() {
-    // Present a spinner on method's call
-    const spinner = this.authProvider.spinner();
-    spinner.present();
-    // Handles logout HTTP request
-    this.authProvider.logout().then(() => {
-      // Sets LoginPage as RootPage in LogOut action
-      this.navCtrl.setRoot(LoginPage);
-      this.navCtrl.popToRoot();
-    })
-    // Handles errors on HTTP request
-    .catch(err => {
-      spinner.dismiss();
-      console.error("An errror occurred at logout's AuthProvider method");
-      console.error(err);
-    });
-  }
-
-  // Handles getUserInfo HTTP request
-  profile() {
-    // Present a spinner on method's call
-    const spinner = this.authProvider.spinner();
-    spinner.present();
-    // Check if token is still valid
-    this.authProvider.getToken().then((token) => {
-      if(token !== null) {
-        // Calls the AuthProvider's method to manage the getUserInfo request
-        this.authProvider.getUserInfo().then((user) => {
-          // Redirects to user's profile page
-          this.navCtrl.push(ProfilePage, {'user': user});
-        })
-        // Handles errors on user's info retrieving
-        .catch(error => {
-          spinner.dismiss();
-          console.error("Error at getUserInfo's AuthProvider method");
-          console.error(error);
-        })
-      }
-      else {
-        // Token's value is null, so session has already expired => Redirects to LoginPage
-        this.loginRedirect();
-      }
-    })
-    // Handles errors on token retrieving
-    .catch(err => {
-      spinner.dismiss();
-      // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
-      console.error(err);
-      let temp = this.authProvider.errorHandler(err);
-      this.authProvider.displayToast(temp);
-    })
-  }
-
   // Sets LoginPage as RootPage and displays a message (Session expired). Finally, redirects to LoginPage
   private loginRedirect() {
     this.authProvider.displayToast();

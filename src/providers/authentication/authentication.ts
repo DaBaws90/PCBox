@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { AlertController, ToastController, NavController, LoadingController } from 'ionic-angular';
+import { ProductsProvider } from '../products/products';
 
 // import { Observable } from 'rxjs/Observable';
 // import 'rxjs/add/observable/fromPromise';
@@ -20,13 +21,17 @@ const localForage:LocalForage = require('localforage');
 @Injectable()
 export class AuthenticationProvider {
   
-  header = new HttpHeaders({ "Content-Type": "application/json", "Accept": "application/json" });
+  header = new HttpHeaders({ 
+    "Content-Type": "application/json", 
+    "Accept": "application/json" 
+  });
 
   baseUrl:string = "https://localhost/public/api/auth";
   // baseUrl:string = "https://192.168.2.6/public/api/auth";
   // baseUrl:string = "https://10.10.1.106/public/api/auth";
 
   token:any;
+  categories:any;
 
   transitionOpts = {
     animation: 'md-transition',
@@ -40,7 +45,7 @@ export class AuthenticationProvider {
   };
 
   constructor(public http: HttpClient, private storage: Storage, public alertCtrl: AlertController, public toastCtrl: ToastController,
-    public loadingCtrl: LoadingController) {
+    public loadingCtrl: LoadingController, private prodsProvider: ProductsProvider) {
     console.log('Hello AuthenticationProvider Provider');
     localForage.config({
       name: 'MyApp'
@@ -134,7 +139,7 @@ export class AuthenticationProvider {
       let header = new HttpHeaders({ 
         "Content-Type": "application/json", 
         "Accept": "application/json", 
-        'Authorization': 'Bearer ' + this.token['access_token']
+        'Authorization': 'Bearer ' + this.token['access_token'],
       });
       // Sends a HTTP request to the specified URL
       this.http.get(this.baseUrl + '/user', { headers: header})
@@ -149,6 +154,30 @@ export class AuthenticationProvider {
           reject(error);
         });
     });
+  }
+
+  editUserInfo(data:any) {
+    return new Promise((resolve, reject) => {
+      // Sets the headers properly
+      let header = new HttpHeaders({ 
+        "Content-Type": "application/json", 
+        "Accept": "application/json", 
+        'Authorization': 'Bearer ' + this.token['access_token']
+      });
+      // Sends a HTTP request to the specified URL
+      this.http.post(this.baseUrl + '/user', JSON.stringify(data), { headers: header})
+        // Subscribs and resolves the response on success
+        .subscribe((response) => {
+          this.displayToast(response['success'])
+          resolve(response);
+        }, error => {
+          // Handles the error and displays a message to user. Then, rejects the error
+          console.error("Error at editUserInfo method");
+          let tmp = this.errorHandler(error);
+          this.displayToast(tmp);
+          reject(error);
+        });
+    })
   }
 
   // AUX function to handle the local storage save proccess
@@ -184,7 +213,14 @@ export class AuthenticationProvider {
             // Save the value into a var if token still "alive"
             this.token = data;
             console.info("Token didn't expire yet");
-            resolve(data);
+            this.prodsProvider.productsIndex().then(response => {
+              this.categories = response['categories'];
+              resolve(data);
+            })
+            .catch(err => {
+              console.error(err);
+            })
+            
           }
           else {
             localForage.removeItem('token').then(() => {
@@ -238,6 +274,7 @@ export class AuthenticationProvider {
     }).present();
   }
 
+  // Returns a loadingController instance with an specific configuration
   spinner() {
     return this.loadingCtrl.create( this.loadingOpts );
   }
@@ -250,9 +287,9 @@ export class AuthenticationProvider {
     if(error.error.error) {
       if (error.error instanceof ErrorEvent) {
         // A client-side or network error occurred. Handle it accordingly.
-        console.error('An error occurred:', error.error.message);
+        console.error('An error occurred: ', error.error.message);
         // Fills the empty tring with a message
-        temp = 'An error occurred:', error.error.message;
+        temp = 'An error occurred: ', error.error.message;
       } else {
         // The backend returned an unsuccessful response code.
         // The response body may contain clues as to what went wrong
@@ -269,6 +306,7 @@ export class AuthenticationProvider {
       }
     }
     else {
+      console.error(error)
       temp = `Error code ${error.status} (${error.statusText}), error(s) details are: ` + error.error.message;
     }
     // return an observable with a user-facing error message

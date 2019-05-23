@@ -94,9 +94,9 @@ export class CategoriesPage {
 
   // Replaces back button functionality to avoid some weird malfunctioning (I don't know why though)
   private redirectBack() {
-    this.navCtrl.pop().then(() => {
+    // this.navCtrl.pop().then(() => {
       this.navCtrl.popToRoot();
-    });
+    // });
   }
 
 }

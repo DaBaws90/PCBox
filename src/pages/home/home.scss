@@ -67,4 +67,8 @@ page-home {
         }
     }
 
+    ion-buttons[start] {
+      order: 2;
+    }
+
 }

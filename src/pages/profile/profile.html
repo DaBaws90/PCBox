@@ -5,33 +5,111 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar hideBackButton>
-    <ion-title>Profile</ion-title>
-    <ion-buttons start>
-      <button ion-button (click)="redirectBack()">
-        <ion-icon name="close"></ion-icon>
+  <ion-navbar hideBackButton color="dark">
+    <ion-buttons end>
+      <button ion-button large (click)="redirectBack()">
+        <ion-icon name="arrow-back"></ion-icon>
       </button>
     </ion-buttons>
+    <ion-title text-center margin-left>Profile</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-card>
-    <ion-item padding>
-      <h2 text-center padding-right>Perfil de {{ user.user.name }}</h2>
-      <ion-row>
-        <ion-avatar item-start>
-          <img src="assets/imgs/17004.svg" alt="User Icon">
-          <!--<ion-icon item-start name="contact"></ion-icon>-->
-        </ion-avatar>
-      </ion-row>
-    </ion-item>
 
-    <ion-card-content>
-      <ion-item>
-        <h4>Detalles del usuario</h4>
-      </ion-item>
-    </ion-card-content>
+  <ion-grid padding-top>
+    <ion-row padding-top>
+      <ion-col></ion-col>
+      <ion-col col-auto text-center>
+        <div padding-top>
+          <ion-fab style="left:75%; top:30px;" class="customFabs" top right edge>
+            <button (press)="pressEvent($event)" ion-fab color="dark"><ion-icon name="arrow-forward"></ion-icon></button>
+            <ion-fab-list side="top">
+              <button (click)="goTo('ReferencesPage')" ion-fab color="primary"><ion-icon name="search"></ion-icon></button>
+            </ion-fab-list>
+            <ion-fab-list side="bottom">
+              <button (click)="goTo('HomePage')" ion-fab color="secondary"><ion-icon name="home"></ion-icon></button>
+              <button (click)="goTo('logout')" ion-fab color="warning"><ion-icon name="log-out"></ion-icon></button>
+            </ion-fab-list>
+            <!--<ion-fab-list side="left" style="right:50px; top:-3px;">
+              <button ion-fab color="light"><ion-icon name="logo-googleplus"></ion-icon></button>
+            </ion-fab-list>-->
+            <ion-fab-list side="right">
+              <button (click)="goTo('CategoriesPage')" ion-fab color="dark"><ion-icon name="list"></ion-icon></button>
+            </ion-fab-list>
+          </ion-fab>
+          <img src="assets/imgs/woll-smoth-2.PNG"/>
+          <ion-grid>
+            <ion-row>
+              <ion-col></ion-col>
+              <ion-col col-6>
+                <div *ngIf="user" class="myOverlay">
+                  <p>Hola, {{ user.name }}</p>
+                </div>
+              </ion-col>
+              <ion-col></ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+        
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
 
-  </ion-card>
+    <ion-row padding>
+      <ion-col></ion-col>
+      <ion-col col-auto text-center>
+        <h2>Editar perfil</h2>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+
+    <ion-row padding>
+      <ion-col></ion-col>
+        <ion-col col-auto text-center>
+          <h6>Edite sus datos personales o consulte la información personal actual</h6>
+        </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+
+    <ion-row padding>
+        <ion-col col-4 offset-1 text-center>
+          <ion-item>
+            <ion-label floating>Nombre</ion-label>
+            <ion-input [(ngModel)]="user.name"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col col-4 offset-1 text-center>
+          <ion-item>
+            <ion-label floating>Email</ion-label>
+            <ion-input [(ngModel)]="user.email"></ion-input>
+          </ion-item>
+        </ion-col>
+    </ion-row>
+
+    <ion-row padding>
+      <ion-col col-4 offset-4>
+        <button ion-button icon-end block round outline (click)="editProfile()">Guardar<ion-icon name="checkmark"></ion-icon></button>
+      </ion-col>
+    </ion-row>
+
+<!--
+    <ion-row padding>
+      <ion-col></ion-col>
+      <ion-col col-auto text-center>
+        <h2>Listado de presupuestos</h2>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+
+    <ion-row padding>
+      <ion-col></ion-col>
+        <ion-col col-auto text-center>
+          <h6>Consulte los presupuestos</h6>
+        </ion-col>
+      <ion-col></ion-col>
+    </ion-row> -->
+
+  </ion-grid>
+
 </ion-content>

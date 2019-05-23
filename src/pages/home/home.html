@@ -1,16 +1,16 @@
 <ion-header>
-  <ion-navbar color="dark" text-center>
-    <ion-title>
-      Inicio
-    </ion-title>
+  <ion-navbar color="dark" text-center >
+    <ion-title>Inicio</ion-title>
+
+    <ion-buttons start>
+      <button ion-button item-start menuToggle="leftMenu">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding-top>
-  <div text-center>
-    <button ion-button color="primary" (click)="logout()">Cerrar sesión</button>
-    <button ion-button color="dark" (click)="profile()">Ir al perfil</button>
-  </div>
 
   <ion-grid padding-top>
     <ion-row justify-content-center align-items-center>

@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthenticationProvider } from '../authentication/authentication';
 // import { resolveDefinition } from '@angular/core/src/view/util';
+declare var require:Function;
+const localForage:LocalForage = require('localforage');
 
 /*
   Generated class for the ProductsProvider provider.
@@ -14,16 +16,21 @@ export class ProductsProvider {
 
   baseUrl = "https://localhost/public/api/products";
   // baseUrl = "https://192.168.2.6/public/api/products";
+  header:any;
 
-  // Generates a proper header
-  header = new HttpHeaders({
-    "Content-Type": "application/json", 
-    "Accept": "application/json", 
-    'Authorization': 'Bearer ' + this.authProvider.token['access_token']
-  });
-
-  constructor(public http: HttpClient, public authProvider: AuthenticationProvider) {
+  constructor(public http: HttpClient) {
     console.log('Hello ProductsProvider Provider');
+    localForage.config({
+      name: 'MyApp'
+    });
+    localForage.getItem('token').then(token => {
+      // Generates a proper header
+      this.header = new HttpHeaders({
+        "Content-Type": "application/json", 
+        "Accept": "application/json", 
+        'Authorization': 'Bearer ' + token['access_token']
+      });
+    })
   }
 
   productsIndex() {
@@ -36,8 +43,8 @@ export class ProductsProvider {
           resolve(response);
         }, (error) => {
           // Handles the error and displays an info message to user
-          let tmp = this.authProvider.errorHandler(error);
-          this.authProvider.displayToast(tmp);
+          // let tmp = this.authProvider.errorHandler(error);
+          // this.authProvider.displayToast(tmp);
           reject(error);
       });
     })
@@ -52,8 +59,8 @@ export class ProductsProvider {
           resolve(response);
         }, error => {
           // Handles the error and displays an info message to user
-          let tmp = this.authProvider.errorHandler(error);
-          this.authProvider.displayToast(tmp);
+          // let tmp = this.authProvider.errorHandler(error);
+          // this.authProvider.displayToast(tmp);
           reject(error);
       });
     });
@@ -68,8 +75,8 @@ export class ProductsProvider {
           resolve(response);
         }, error => {
           // Handles the error and displays an info message to user
-          let tmp = this.authProvider.errorHandler(error);
-          this.authProvider.displayToast(tmp);
+          // let tmp = this.authProvider.errorHandler(error);
+          // this.authProvider.displayToast(tmp);
           reject(error);
       });
     });

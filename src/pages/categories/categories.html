@@ -5,11 +5,16 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar hideBackButton>
+  <ion-navbar hideBackButton color="dark">
     <ion-title text-center margin-right>Buscador de categorías</ion-title>
+    <ion-buttons end>
+      <button ion-button large (click)="redirectBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-buttons start>
-      <button ion-button (click)="redirectBack()">
-        <ion-icon name="close"></ion-icon>
+      <button ion-button item-start menuToggle="leftMenu">
+        <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
