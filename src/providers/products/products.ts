@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthenticationProvider } from '../authentication/authentication';
-// import { resolveDefinition } from '@angular/core/src/view/util';
+
 declare var require:Function;
 const localForage:LocalForage = require('localforage');
 

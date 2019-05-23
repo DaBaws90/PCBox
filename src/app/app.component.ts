@@ -29,6 +29,7 @@ export class MyApp {
   rootPage:any = LoginPage;
   pages:any;
   user:any;
+  categories:any;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private authProv: AuthenticationProvider,
     private prodsProvider: ProductsProvider) {
@@ -44,6 +45,12 @@ export class MyApp {
           // console.log(token);
           this.user = token['user'];
           this.rootPage = HomePage;
+          this.prodsProvider.productsIndex().then(response => {
+            this.categories = response['categories'];
+          })
+          .catch(err => {
+            console.log("ERROR AT APP.COMP PRODUCTSINDEX")
+          })
         }
         else {
           console.log("Token expired");
@@ -72,9 +79,9 @@ export class MyApp {
       if(token !== null) {
         console.log("Brownsing to " + page.name);
         if(page.page !== ProfilePage){
-          this.prodsProvider.productsIndex().then(response => {
-            this.nav.push(page.page, {'categories': response['categories']}, this.authProv.transitionOpts )
-          })
+          // this.prodsProvider.productsIndex().then(response => {
+            this.nav.push(page.page, {'categories': this.categories}, this.authProv.transitionOpts )
+          // })
           
         }
         else {
@@ -125,7 +132,6 @@ export class MyApp {
 
   // Sets LoginPage as RootPage and displays a message (Session expired). Finally, redirects to LoginPage
   private loginRedirect() {
-    this.authProv.displayToast();
     this.nav.setRoot(LoginPage).then(() => {
       this.nav.popToRoot();
     });

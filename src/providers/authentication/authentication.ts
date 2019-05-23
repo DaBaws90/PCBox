@@ -213,13 +213,15 @@ export class AuthenticationProvider {
             // Save the value into a var if token still "alive"
             this.token = data;
             console.info("Token didn't expire yet");
-            this.prodsProvider.productsIndex().then(response => {
-              this.categories = response['categories'];
-              resolve(data);
-            })
-            .catch(err => {
-              console.error(err);
-            })
+            resolve(data);
+            
+            // this.prodsProvider.productsIndex().then(response => {
+            //   this.categories = response['categories'];
+              
+            // })
+            // .catch(err => {
+            //   console.error(err);
+            // })
             
           }
           else {
