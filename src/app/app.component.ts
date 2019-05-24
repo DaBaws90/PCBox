@@ -118,9 +118,11 @@ export class MyApp {
     const spinner = this.authProv.spinner();
     spinner.present();
     // Handles logout HTTP request
-    this.authProv.logout().then(() => {
-      // Sets LoginPage as RootPage in LogOut action
-      this.loginRedirect();
+    this.authProv.logout().then(response => {
+      // We don't call the loginRedirect function because it displays the session expired mssg on call, and we don't need it at this moment
+      this.nav.setRoot(LoginPage).then(() => {
+        this.nav.popToRoot();
+      })
     })
     // Handles errors on HTTP request
     .catch(err => {
@@ -132,8 +134,9 @@ export class MyApp {
 
   // Sets LoginPage as RootPage and displays a message (Session expired). Finally, redirects to LoginPage
   private loginRedirect() {
+    this.authProv.displayToast();
     this.nav.setRoot(LoginPage).then(() => {
-      this.nav.popToRoot();
+      this.nav.popToRoot(this.authProv.transitionOpts);
     });
   }
 

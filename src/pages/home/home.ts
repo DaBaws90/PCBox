@@ -24,8 +24,9 @@ export class HomePage {
   // Sets LoginPage as RootPage and displays a message (Session expired). Finally, redirects to LoginPage
   private loginRedirect() {
     this.authProvider.displayToast();
-    this.navCtrl.setRoot(LoginPage);
-    this.navCtrl.popToRoot();
+    this.navCtrl.setRoot(LoginPage).then(() => {
+      this.navCtrl.popToRoot(this.authProvider.transitionOpts);
+    });
   }
 
   // Navigates to ReferencesPage

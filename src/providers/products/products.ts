@@ -23,14 +23,16 @@ export class ProductsProvider {
     localForage.config({
       name: 'MyApp'
     });
-    localForage.getItem('token').then(token => {
-      // Generates a proper header
-      this.header = new HttpHeaders({
-        "Content-Type": "application/json", 
-        "Accept": "application/json", 
-        'Authorization': 'Bearer ' + token['access_token']
-      });
-    })
+    if(localForage.hasOwnProperty('token')) {
+      localForage.getItem('token').then(token => {
+        // Generates a proper header
+        this.header = new HttpHeaders({
+          "Content-Type": "application/json", 
+          "Accept": "application/json", 
+          'Authorization': 'Bearer ' + token['access_token']
+        });
+      })
+    }
   }
 
   productsIndex() {
