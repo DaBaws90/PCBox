@@ -1,10 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthenticationProvider } from '../authentication/authentication';
-import { Events } from 'ionic-angular';
-
-declare var require:Function;
-const localForage:LocalForage = require('localforage');
 
 /*
   Generated class for the ProductsProvider provider.
@@ -19,51 +14,8 @@ export class ProductsProvider {
   // baseUrl = "https://192.168.2.6/public/api/products";
   header:any;
 
-  constructor(public http: HttpClient, public eventListener: Events) {
+  constructor(public http: HttpClient) {
     console.log('Hello ProductsProvider Provider');
-    localForage.config({
-      name: 'MyApp'
-    });
-
-    this.eventListener.subscribe('tokenValueSet', token => {
-      console.info("Event triggered");
-      // Generates a proper header
-      this.header = new HttpHeaders({
-        "Content-Type": "application/json", 
-        "Accept": "application/json", 
-        'Authorization': 'Bearer ' + token['access_token']
-      });
-      console.info(token)
-    })
-    
-    // setInterval(() => {
-    //   console.log("Testing")
-    // }, 1000);
-
-    // if(this.checkStorage()) {
-    //   this.getStorageItem();
-    // }
-    // else {
-    //   console.info("storage has no property")
-    //   setInterval(() => {
-
-    //   })
-    // }
-  }
-
-  private checkStorage() {
-    return localForage.hasOwnProperty('token');
-  }
-
-  private getStorageItem() {
-    localForage.getItem('token').then(token => {
-      // Generates a proper header
-      this.header = new HttpHeaders({
-        "Content-Type": "application/json", 
-        "Accept": "application/json", 
-        'Authorization': 'Bearer ' + token['access_token']
-      });
-    })
   }
 
   productsIndex(token:any) {

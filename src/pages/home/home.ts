@@ -25,7 +25,7 @@ export class HomePage {
   private loginRedirect() {
     this.authProvider.displayToast();
     this.navCtrl.setRoot(LoginPage).then(() => {
-      this.navCtrl.popToRoot(this.authProvider.transitionOpts);
+      this.navCtrl.popToRoot();
     });
   }
 
