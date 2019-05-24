@@ -73,15 +73,17 @@ export class ReferencesPage {
   // Sets LoginPage as RootPage and displays a message (Session expired). Finally, redirects to LoginPage
   private loginRedirect() {
     this.authProv.displayToast();
-    this.navCtrl.setRoot(LoginPage);
-    this.navCtrl.popToRoot();
+    this.navCtrl.setRoot(LoginPage).then(() => {
+      this.navCtrl.popToRoot();
+    });
+    
   }
 
   // Replaces back button functionality to avoid some weird malfunctioning (I don't know why though
   private redirectBack() {
-    // this.navCtrl.pop().then(() => {
-      this.navCtrl.popToRoot();
-    // });
+    this.navCtrl.pop().then(() => {
+      // this.navCtrl.popToRoot();
+    });
   }
 
 }
