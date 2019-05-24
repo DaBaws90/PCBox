@@ -63,9 +63,9 @@ export class HomePage {
     spinner.present();
     // Check if token is still valid
     this.authProvider.getToken().then(token => {
-      if(token !== null) {
+      if(token) {
         // Calls the ProductsProvider's method to manage the getCategoriesList request
-        this.prodsProvider.productsIndex().then(data => {
+        this.prodsProvider.productsIndex(token).then(data => {
           // Navigates to CategoriesPage
           console.log("Browsing to CategoriesPage");
           this.navCtrl.push(CategoriesPage, {'categories': data['categories'] }, this.authProvider.transitionOpts);

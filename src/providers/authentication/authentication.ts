@@ -34,8 +34,11 @@ export class AuthenticationProvider {
   categories:any;
 
   transitionOpts = {
+    animate: true,
     animation: 'md-transition',
-    duration: 1000,
+    duration: 500,
+    direction: 'forward',
+    easing: 'ease-in-out',
   };
 
   loadingOpts = {
@@ -212,17 +215,8 @@ export class AuthenticationProvider {
           if(!this.checkExpiredToken(data)) {
             // Save the value into a var if token still "alive"
             this.token = data;
-            console.info("Token didn't expire yet");
+            // console.info("Token didn't expire yet");
             resolve(data);
-            
-            // this.prodsProvider.productsIndex().then(response => {
-            //   this.categories = response['categories'];
-              
-            // })
-            // .catch(err => {
-            //   console.error(err);
-            // })
-            
           }
           else {
             localForage.removeItem('token').then(() => {

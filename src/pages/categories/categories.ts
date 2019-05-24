@@ -49,7 +49,7 @@ export class CategoriesPage {
     spinner.present();
     // Check if token is still valid
     this.authProv.getToken().then(token => {
-      if(token !== null) {
+      if(token) {
         // Calls the ProdutsProvider's method to manage the categoriesSearch request
         this.prodsProv.categoriesSearch(this.data).then(response => {
           // console.info(response);
@@ -94,9 +94,9 @@ export class CategoriesPage {
 
   // Replaces back button functionality to avoid some weird malfunctioning (I don't know why though)
   private redirectBack() {
-    // this.navCtrl.pop().then(() => {
-      this.navCtrl.popToRoot();
-    // });
+    this.navCtrl.pop().then(() => {
+      // this.navCtrl.popToRoot();
+    });
   }
 
 }

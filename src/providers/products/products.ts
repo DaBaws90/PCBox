@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthenticationProvider } from '../authentication/authentication';
+import { Events } from 'ionic-angular';
 
 declare var require:Function;
 const localForage:LocalForage = require('localforage');
@@ -18,26 +19,61 @@ export class ProductsProvider {
   // baseUrl = "https://192.168.2.6/public/api/products";
   header:any;
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, public eventListener: Events) {
     console.log('Hello ProductsProvider Provider');
     localForage.config({
       name: 'MyApp'
     });
-    if(localForage.hasOwnProperty('token')) {
-      localForage.getItem('token').then(token => {
-        // Generates a proper header
-        this.header = new HttpHeaders({
-          "Content-Type": "application/json", 
-          "Accept": "application/json", 
-          'Authorization': 'Bearer ' + token['access_token']
-        });
-      })
-    }
+
+    this.eventListener.subscribe('tokenValueSet', token => {
+      console.info("Event triggered");
+      // Generates a proper header
+      this.header = new HttpHeaders({
+        "Content-Type": "application/json", 
+        "Accept": "application/json", 
+        'Authorization': 'Bearer ' + token['access_token']
+      });
+      console.info(token)
+    })
+    
+    // setInterval(() => {
+    //   console.log("Testing")
+    // }, 1000);
+
+    // if(this.checkStorage()) {
+    //   this.getStorageItem();
+    // }
+    // else {
+    //   console.info("storage has no property")
+    //   setInterval(() => {
+
+    //   })
+    // }
   }
 
-  productsIndex() {
+  private checkStorage() {
+    return localForage.hasOwnProperty('token');
+  }
+
+  private getStorageItem() {
+    localForage.getItem('token').then(token => {
+      // Generates a proper header
+      this.header = new HttpHeaders({
+        "Content-Type": "application/json", 
+        "Accept": "application/json", 
+        'Authorization': 'Bearer ' + token['access_token']
+      });
+    })
+  }
+
+  productsIndex(token:any) {
     // Returns a promise to sync the app's flow
     return new Promise((resolve, reject) => {
+      this.header = new HttpHeaders({ 
+        "Content-Type": "application/json", 
+        "Accept": "application/json", 
+        'Authorization': 'Bearer ' + token['access_token'],
+      });
       // Send HTTP Request to the specified URL
       this.http.get(this.baseUrl, { headers: this.header })
         // Subscribes and resolves the response on success

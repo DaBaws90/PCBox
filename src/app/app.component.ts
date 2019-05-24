@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -32,7 +32,7 @@ export class MyApp {
   categories:any;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private authProv: AuthenticationProvider,
-    private prodsProvider: ProductsProvider) {
+    private prodsProvider: ProductsProvider, public eventPublisher: Events) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -45,12 +45,15 @@ export class MyApp {
           // console.log(token);
           this.user = token['user'];
           this.rootPage = HomePage;
-          this.prodsProvider.productsIndex().then(response => {
-            this.categories = response['categories'];
-          })
-          .catch(err => {
-            console.log("ERROR AT APP.COMP PRODUCTSINDEX")
-          })
+          // this.eventPublisher.publish("tokenValueSet", token);
+          // this.prodsProvider.productsIndex(token).then(response => {
+          //   this.categories = response['categories'];
+          // })
+          // .catch(err => {
+          //   // this.authProv.displayToast(this.authProv.errorHandler(err))
+          //   console.log("Error at app.component's productsIndex: ")
+          //   console.log(err);
+          // })
         }
         else {
           console.log("Token expired");
@@ -79,9 +82,14 @@ export class MyApp {
       if(token !== null) {
         console.log("Brownsing to " + page.name);
         if(page.page !== ProfilePage){
-          // this.prodsProvider.productsIndex().then(response => {
-            this.nav.push(page.page, {'categories': this.categories}, this.authProv.transitionOpts )
-          // })
+          this.prodsProvider.productsIndex(token).then(response => {
+            this.nav.push(page.page, {'categories': response['categories']}, this.authProv.transitionOpts )
+          })
+          .catch(err => {
+            spinner.dismiss()
+            this.authProv.displayToast(this.authProv.errorHandler(err))
+            console.log("Error at app.component's productsIndex: " + JSON.stringify(err.error.message))
+          })
           
         }
         else {
@@ -136,7 +144,7 @@ export class MyApp {
   private loginRedirect() {
     this.authProv.displayToast();
     this.nav.setRoot(LoginPage).then(() => {
-      this.nav.popToRoot(this.authProv.transitionOpts);
+      this.nav.popToRoot();
     });
   }
 

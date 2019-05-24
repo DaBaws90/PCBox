@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
@@ -21,7 +21,7 @@ import { ProductsProvider } from '../../providers/products/products';
   templateUrl: 'profile.html',
 })
 export class ProfilePage {
-
+  zone: NgZone;
   user:any;
   page:Page;
   categories:any = null;
@@ -72,7 +72,7 @@ export class ProfilePage {
     spinner.present();
     // Check if token is still valid
     this.authProvider.getToken().then(token => {
-      if(token !== null) {
+      if(token) {
 
         switch (option) {
           case 'HomePage':
@@ -85,9 +85,14 @@ export class ProfilePage {
 
           case 'CategoriesPage':
             this.page = CategoriesPage;
-            this.prodsProvider.productsIndex().then(response => {
+            this.prodsProvider.productsIndex(token).then(response => {
               this.navCtrl.push(this.page, {'categories': response['categories']}, this.authProvider.transitionOpts );
             })
+            .catch(err => {
+              spinner.dismiss()
+              this.authProvider.displayToast(this.authProvider.errorHandler(err))
+              console.error("Error at profile's switch (Categories case): " + JSON.stringify(err.error.message));
+            });
             break;
         
           default:
@@ -100,7 +105,9 @@ export class ProfilePage {
               })
             })
             .catch(err => {
-              console.error("Error at logout: " + JSON.parse(err));
+              spinner.dismiss()
+              this.authProvider.displayToast(this.authProvider.errorHandler(err))
+              console.error("Error at profile's logout: " + JSON.stringify(err.error.message));
             });
             break;
         } // Switch ending
@@ -137,9 +144,12 @@ export class ProfilePage {
   }
 
   private redirectBack() {
-    // this.navCtrl.pop().then(() => {
-      this.navCtrl.popToRoot();
-    // });
+    this.navCtrl.pop().then(() => {
+      // this.navCtrl.popToRoot();
+    //   this.zone.run(() => {
+    //     console.log("Page refreshed")
+    //   })
+    });
   }
 
 }
