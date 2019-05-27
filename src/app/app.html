@@ -9,27 +9,27 @@
 
     <ion-grid padding>
 
-        <ion-row padding-top>
-            <ion-col text-center>
-                Bienvenido, 
-            </ion-col>
-        </ion-row>
+      <ion-row padding-top>
+          <ion-col text-center>
+              Bienvenido, 
+          </ion-col>
+      </ion-row>
 
-        <ion-row padding-bottom>
-            <ion-col text-center>
-                <span *ngIf="user">{{ user.name }}</span>
-            </ion-col>
-        </ion-row>
+      <ion-row padding-bottom>
+        <ion-col text-center>
+          <span *ngIf="authProv.token">{{ authProv.token.user.name }}</span>
+        </ion-col>
+      </ion-row>
 
-        <ion-row justify-content-center align-items-center padding>
-            <ion-col></ion-col>
-            <ion-col col-6 text-center>
-              <ion-avatar>
-                  <img class="myImg" src="assets/imgs/woll-smoth-2.PNG">
-              </ion-avatar>
-            </ion-col>
-            <ion-col></ion-col>
-        </ion-row>
+      <ion-row justify-content-center align-items-center padding>
+          <ion-col></ion-col>
+          <ion-col col-6 text-center>
+            <ion-avatar>
+              <img class="myImg" src="assets/imgs/woll-smoth-2.PNG">
+            </ion-avatar>
+          </ion-col>
+          <ion-col></ion-col>
+      </ion-row>
     </ion-grid>
                     
     <ion-list id="pagesList" *ngIf="pages" padding>

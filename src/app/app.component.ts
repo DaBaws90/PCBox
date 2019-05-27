@@ -66,30 +66,45 @@ export class MyApp {
     this.authProv.getToken().then(token => {
       if(token) {
         console.log("Brownsing to " + page.name);
-        if(page.page !== ProfilePage){
-          this.prodsProvider.productsIndex(token).then(response => {
-            this.nav.push(page.page, {'categories': response['categories']}, this.authProv.transitionOpts )
-          })
-          .catch(err => {
-            spinner.dismiss()
-            this.authProv.displayToast(this.authProv.errorHandler(err))
-            console.log("Error at app.component's productsIndex: " + JSON.stringify(err.error.message))
-          })
-          
+
+        switch (page.page) {
+          case ProfilePage:
+            this.authProv.getUserInfo().then(user => {
+              this.nav.push(page.page, {'user': user }, this.authProv.transitionOpts )
+            })
+            .catch(err => {
+              spinner.dismiss();
+              // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
+              // console.error(err);
+              // Error message is already displayed in a toast
+              // let tmp = this.authProv.errorHandler(err);
+              // this.authProv.displayToast(tmp);
+            })
+            break;
+
+          case CategoriesPage:
+            this.prodsProvider.productsIndex(token).then(response => {
+              this.nav.push(page.page, {'categories': response['categories']}, this.authProv.transitionOpts )
+            })
+            .catch(err => {
+              spinner.dismiss()
+              this.authProv.displayToast(this.authProv.errorHandler(err))
+              console.log("Error at app.component's productsIndex: " + JSON.stringify(err.error.message))
+            })
+            break;
+
+          case ReferencesPage:
+            this.nav.push(ReferencesPage, {}, this.authProv.transitionOpts)
+            break;
+        
+          default:
+            console.log("Default case")
+            this.nav.popToRoot().then(() => {
+              spinner.dismiss();
+            });
+            break;
         }
-        else {
-          this.authProv.getUserInfo().then(user => {
-            this.nav.push(page.page, {'user': user }, this.authProv.transitionOpts )
-          })
-          .catch(err => {
-            spinner.dismiss();
-            // Send error response to ErrorHandler method and returns a formatted string. Then, displays the string with a toast
-            // console.error(err);
-            // Error message is already displayed in a toast
-            // let tmp = this.authProv.errorHandler(err);
-            // this.authProv.displayToast(tmp);
-          })
-        }
+
       }
       else {
         // Token's value is null, so session has already expired => Redirects to LoginPage

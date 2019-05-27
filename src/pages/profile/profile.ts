@@ -76,7 +76,8 @@ export class ProfilePage {
 
         switch (option) {
           case 'HomePage':
-            this.page = HomePage;
+            this.page = null;
+            this.navCtrl.popToRoot();
             break;
 
           case 'ReferencesPage':
