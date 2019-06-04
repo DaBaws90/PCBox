@@ -51,7 +51,7 @@ export class CategoriesPage {
     this.authProv.getToken().then(token => {
       if(token) {
         // Calls the ProdutsProvider's method to manage the categoriesSearch request
-        this.prodsProv.categoriesSearch(this.data).then(response => {
+        this.prodsProv.categoriesSearch(token, this.data).then(response => {
           // console.info(response);
           // Navigates to ResultsPage
           this.navCtrl.push( ResultsPage, {'productsArray': response}, this.authProv.transitionOpts )

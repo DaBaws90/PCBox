@@ -6,13 +6,13 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title text-center>Resultados</ion-title>
+    <ion-title text-center padding-left margin-left>Resultados</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
 
-<div *ngIf="productsArray.error; else alternative_content">
+<div *ngIf="productsArray.error; else alternative_content" text-center padding>
   <h3>Whoops! </h3>
   <p>{{ productsArray.error }}</p>
 </div>

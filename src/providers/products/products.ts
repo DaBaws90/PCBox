@@ -40,9 +40,14 @@ export class ProductsProvider {
     })
   }
 
-  referencesSearch(data:any) {
+  referencesSearch(token:any, data:any) {
     // Returns a promise to sync the app's flow
     return new Promise((resolve, reject) => {
+      this.header = new HttpHeaders({ 
+        "Content-Type": "application/json", 
+        "Accept": "application/json", 
+        'Authorization': 'Bearer ' + token['access_token'],
+      });
       // Send HTTP Request to the specified URL
       this.http.post(this.baseUrl + '/refSearch', JSON.stringify(data), { headers: this.header })
         .subscribe(response => {
@@ -56,9 +61,14 @@ export class ProductsProvider {
     });
   }
 
-  categoriesSearch(data:any) {
+  categoriesSearch(token:any, data:any) {
     // Returns a promise to sync the app's flow
     return new Promise((resolve, reject) => {
+      this.header = new HttpHeaders({ 
+        "Content-Type": "application/json", 
+        "Accept": "application/json", 
+        'Authorization': 'Bearer ' + token['access_token'],
+      });
       // Send HTTP Request to the specified URL
       this.http.post(this.baseUrl + '/catSearch', JSON.stringify(data), { headers: this.header })
         .subscribe(response => {

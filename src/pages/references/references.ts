@@ -41,7 +41,7 @@ export class ReferencesPage {
     this.authProv.getToken().then(token => {
       if(token !== null) {
         // Calls the ProdutsProvider's method to manage the referencesSearch request
-        this.prodsProv.referencesSearch(this.data).then(response => {
+        this.prodsProv.referencesSearch(token, this.data).then(response => {
           // console.info(response);
           // Navigates to ResultsPage
           this.navCtrl.push( ResultsPage, {'productsArray': response}, this.authProv.transitionOpts )
